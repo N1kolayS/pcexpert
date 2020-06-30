@@ -91,6 +91,14 @@ class User extends ActiveRecord implements IdentityInterface
         return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
     }
 
+    /**
+     * @param $email
+     * @return User|null
+     */
+    public static function findByEmail($email)
+    {
+        return static::findOne(['email' => $email, 'status' => self::STATUS_ACTIVE]);
+    }
 
 
     /**
@@ -218,11 +226,49 @@ class User extends ActiveRecord implements IdentityInterface
         $this->password_reset_token = null;
     }
 
+    public static function listRoles()
+    {
+        return [
+            self::ROLE_ADMIN => 'Администратор',
+            self::ROLE_MANAGER => 'Менеджер',
+            self::ROLE_OPERATOR => 'Оператор',
+            self::ROLE_MASTER => 'Мастер',
+            self::ROLE_DEFAULT => 'Оператор',
+        ];
+    }
+
     /**
      * @return bool
      */
     public function isAdmin()
     {
         return ($this->role===self::ROLE_ADMIN);
+    }
+
+
+
+    /**
+     * @author Nikolay
+     *
+     * @param bool $insert
+     * @param array $changedAttributes
+     * @throws
+     */
+    public function afterSave ($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+        Yii::$app->authManager->revokeAll($this->id);
+        $userRole = Yii::$app->authManager->getRole($this->role);
+        Yii::$app->authManager->assign($userRole, $this->id);
+
+    }
+
+    /**
+     * @return bool
+     */
+    public function beforeDelete()
+    {
+        Yii::$app->authManager->revokeAll($this->id);
+        return parent::beforeDelete();
     }
 }

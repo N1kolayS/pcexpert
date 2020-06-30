@@ -4,6 +4,7 @@
 namespace app\controllers;
 
 
+use app\models\CreateUser;
 use app\models\User;
 use app\models\UserSearch;
 use yii\filters\AccessControl;
@@ -67,12 +68,15 @@ class UserController extends Controller
      */
     public function actionCreate()
     {
-        $model = new User();
+        $model = new CreateUser();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['update', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            if ($user = $model->signup()) {
+
+                return $this->redirect(['update', 'id' => $user->id]);
+
+            }
         }
-
         return $this->render('create', [
             'model' => $model,
         ]);
@@ -96,6 +100,22 @@ class UserController extends Controller
         return $this->render('update', [
             'model' => $model,
         ]);
+    }
+
+    /**
+     * Deletes an existing User model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param $id
+     * @return \yii\web\Response
+     * @throws NotFoundHttpException
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
+     */
+    public function actionDelete($id)
+    {
+        $this->findModel($id)->delete();
+
+        return $this->redirect(['index']);
     }
 
 
