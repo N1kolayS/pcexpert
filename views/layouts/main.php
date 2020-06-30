@@ -23,7 +23,7 @@ AppAsset::register($this);
         <title><?= Html::encode($this->title) ?></title>
         <?php $this->head() ?>
     </head>
-    <body class="skin-blue sidebar-mini hold-transition ">
+    <body class="skin-green-light sidebar-mini hold-transition ">
     <?php $this->beginBody() ?>
 
     <div class="wrapper">
@@ -63,13 +63,16 @@ AppAsset::register($this);
                     [
                         'options' => ['class' => 'sidebar-menu tree', 'data-widget'=> 'tree'],
                         'items' => [
+                            ['label' => 'Заявки', 'icon' => 'tasks', 'url' => ['/order/index']],
+                            ['label' => 'Клиенты', 'icon' => 'users', 'url' => ['/client/index']],
+                            ['label' => 'Техника', 'icon' => 'laptop', 'url' => ['/equipment/index']],
                             ['label' => 'Справочники', 'icon' => 'folder-o', 'url' => '#', 'items' => [
                                 ['label' => 'Виды техники', 'icon' => 'file-text-o', 'url' => ['/kind/index']],
                                 ['label' => 'Бренды', 'icon' => 'file-text-o', 'url' => ['/brand/index']],
                                 ['label' => 'Модели', 'icon' => 'file-text-o', 'url' => ['/sample/index']],
                             ]],
                             ['label' => 'Admin'],
-                            ['label' => 'Пользователи', 'icon' => 'sitemap', 'url' => ['/user']],
+                            ['label' => 'Пользователи', 'icon' => 'user-secret', 'url' => ['/user/index']],
                         ]
                     ]
                 )?>
