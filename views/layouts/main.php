@@ -52,7 +52,7 @@ AppAsset::register($this);
                     <br>
                    </div>
                 <div class="pull-left info">
-                    <p><?= !(Yii::$app->user->isGuest) ? Yii::$app->user->identity->fio : ''?></p>
+                    <p><?= !(Yii::$app->user->isGuest) ? Yii::$app->user->identity->username : ''?></p>
                 </div>
             </div>
         </section>
@@ -62,7 +62,15 @@ AppAsset::register($this);
                 <?= dmstr\widgets\Menu::widget(
                     [
                         'options' => ['class' => 'sidebar-menu tree', 'data-widget'=> 'tree'],
-                        'items' => []
+                        'items' => [
+                            ['label' => 'Справочники', 'icon' => 'folder-o', 'url' => '#', 'items' => [
+                                ['label' => 'Виды техники', 'icon' => 'file-text-o', 'url' => ['/kind/index']],
+                                ['label' => 'Бренды', 'icon' => 'file-text-o', 'url' => ['/brand/index']],
+                                ['label' => 'Модели', 'icon' => 'file-text-o', 'url' => ['/sample/index']],
+                            ]],
+                            ['label' => 'Admin'],
+                            ['label' => 'Пользователи', 'icon' => 'sitemap', 'url' => ['/user']],
+                        ]
                     ]
                 )?>
 
@@ -100,9 +108,9 @@ AppAsset::register($this);
 
         <footer class="main-footer">
             <div class="pull-right hidden-xs">
-                <b>Version</b> 2.0
+                <b>Version</b>0.0.1 beta
             </div>
-            <div class="text-center"><strong>Copyright &copy; <?=date('Y')?>Genomed </strong> All rights reserved.</div>
+            <div class="text-center"><strong>Copyright &copy; <?=date('Y')?> PC Expert </strong> All rights reserved.</div>
         </footer>
     </div>
 

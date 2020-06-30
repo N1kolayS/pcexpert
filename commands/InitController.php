@@ -27,23 +27,23 @@ class InitController extends Controller
     {
         \Yii::$app->runAction('migrate', ['migrationPath' => '@yii/rbac/migrations/']);
 
-        $role = Yii::$app->authManager->createRole('admin');
+        $role = Yii::$app->authManager->createRole(User::ROLE_ADMIN);
         $role->description = 'Администратор';
         Yii::$app->authManager->add($role);
 
-        $role = Yii::$app->authManager->createRole('manager');
+        $role = Yii::$app->authManager->createRole(User::ROLE_MANAGER);
         $role->description = 'Менеджер';
         Yii::$app->authManager->add($role);
 
-        $role = Yii::$app->authManager->createRole('operator');
+        $role = Yii::$app->authManager->createRole(User::ROLE_OPERATOR);
         $role->description = 'Оператор';
         Yii::$app->authManager->add($role);
 
-        $role = Yii::$app->authManager->createRole('master');
+        $role = Yii::$app->authManager->createRole(User::ROLE_MASTER);
         $role->description = 'Мастер';
         Yii::$app->authManager->add($role);
 
-        $role = Yii::$app->authManager->createRole('user');
+        $role = Yii::$app->authManager->createRole(User::ROLE_DEFAULT);
         $role->description = 'Пользователь';
         Yii::$app->authManager->add($role);
 
