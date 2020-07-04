@@ -3,12 +3,14 @@
 namespace app\controllers;
 
 use app\models\CreateOrder;
+use app\models\Kind;
 use Yii;
 use app\models\Order;
 use app\models\OrderSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /**
  * OrderController implements the CRUD actions for Order model.
@@ -74,6 +76,26 @@ class OrderController extends Controller
         return $this->render('create', [
             'model' => $model,
         ]);
+    }
+
+    /**
+     * @param $q
+     * @return array[]|\string[][]
+     */
+    public function actionAjaxGetEquipmentKind($q)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $data =  ['id' => '', 'text' => ''];
+        if ($q)
+        {
+            $data = [];
+            $models = Kind::find()->where(['like', 'name', $q])->limit(20)->all();
+            foreach ($models as $model)
+            {
+                $data[] = ['id' => $model->id, 'text' => $model->name];
+            }
+        }
+        return ['results' => $data];
     }
 
     /**

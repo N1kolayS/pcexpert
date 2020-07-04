@@ -29,6 +29,10 @@ use Yii;
  */
 class Order extends \yii\db\ActiveRecord
 {
+
+    const PLACEMENT_OFFICE = 1;
+    const PLACEMENT_CLIENT = 2;
+
     /**
      * {@inheritdoc}
      */
@@ -108,4 +112,13 @@ class Order extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'manager_id']);
     }
+
+    public static function listPlacement()
+    {
+        return [
+            self::PLACEMENT_OFFICE => 'В офисе',
+            self::PLACEMENT_CLIENT => 'У клиента'
+        ];
+    }
+
 }

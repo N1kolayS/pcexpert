@@ -20,6 +20,9 @@ class CreateOrder extends Model
 
     public $complect;
     public $problems;
+    public $placement;
+    public $prepayment;
+    public $comment;
 
     /**
      * {@inheritdoc}
@@ -30,8 +33,6 @@ class CreateOrder extends Model
             ['client_fio', 'string', 'min' => 2, 'max' => 255],
             ['client_fio', 'trim'],
             ['client_fio', 'required'],
-
-
 
         ];
     }
@@ -44,7 +45,10 @@ class CreateOrder extends Model
         return [
             'client_fio' => 'ФИО',
             'client_phone' => 'Телефон',
-
+            'client_comment' => 'Комментарий',
+            'problems' => 'Проблемы',
+            'complect' => 'Комплектация',
+            'comment' => 'Комментарий'
         ];
     }
 
