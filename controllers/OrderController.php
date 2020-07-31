@@ -2,8 +2,10 @@
 
 namespace app\controllers;
 
+use app\models\Brand;
 use app\models\CreateOrder;
 use app\models\Kind;
+use app\models\Sample;
 use Yii;
 use app\models\Order;
 use app\models\OrderSearch;
@@ -90,6 +92,42 @@ class OrderController extends Controller
         {
             $data = [];
             $models = Kind::find()->where(['like', 'name', $q])->limit(20)->all();
+            foreach ($models as $model)
+            {
+                $data[] = ['id' => $model->id, 'text' => $model->name];
+            }
+        }
+        return ['results' => $data];
+    }
+
+    /**
+     * @param $q
+     * @return array[]|\string[][]
+     */
+    public function actionAjaxGetEquipmentBrand($q)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $data =  ['id' => '', 'text' => ''];
+        if ($q)
+        {
+            $data = [];
+            $models = Brand::find()->where(['like', 'name', $q])->limit(20)->all();
+            foreach ($models as $model)
+            {
+                $data[] = ['id' => $model->id, 'text' => $model->name];
+            }
+        }
+        return ['results' => $data];
+    }
+
+    public function actionAjaxGetEquipmentSample($q)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $data =  ['id' => '', 'text' => ''];
+        if ($q)
+        {
+            $data = [];
+            $models = Sample::find()->where(['like', 'name', $q])->limit(20)->all();
             foreach ($models as $model)
             {
                 $data[] = ['id' => $model->id, 'text' => $model->name];

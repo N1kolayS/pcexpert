@@ -95,7 +95,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                     ])->label(false) ?>
 
-                <?= $form->field($model, 'serial_number')
+                <?= $form->field($model, 'equipment_serial_number')
                     ->textInput(['maxlength' => true, 'placeholder' => 'Серийный номер'])->label(false) ?>
 
                 <?= $form->field($model, 'complect')

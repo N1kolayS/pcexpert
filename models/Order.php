@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "{{%order}}".
@@ -39,6 +40,19 @@ class Order extends \yii\db\ActiveRecord
     public static function tableName()
     {
         return '{{%order}}';
+    }
+
+    /**
+     * @return array
+     *
+    public function behaviors()
+    {
+        return [
+            'class' => TimestampBehavior::className(),
+            'createdAtAttribute' => 'created_at',
+            'updatedAtAttribute' => null,
+            'value' => date('Y-m-d H:i:s'),
+        ];
     }
 
     /**
@@ -113,12 +127,25 @@ class Order extends \yii\db\ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'manager_id']);
     }
 
+    /**
+     * @return string[]
+     */
     public static function listPlacement()
     {
         return [
             self::PLACEMENT_OFFICE => 'В офисе',
             self::PLACEMENT_CLIENT => 'У клиента'
         ];
+    }
+
+    /**
+     * @param bool $insert
+     * @return bool
+     */
+    public function beforeSave($insert)
+    {
+        $this->manager_id = Yii::$app->user->id;
+        return parent::beforeSave($insert);
     }
 
 }
