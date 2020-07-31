@@ -36,7 +36,7 @@ class Equipment extends \yii\db\ActiveRecord
     {
         return [
             [['created_at'], 'safe'],
-            [['client_id'], 'required'],
+            [['client_id', 'kind', 'brand', 'sample', 'serial_number'], 'required'],
             [['client_id'], 'integer'],
             [['description'], 'string'],
             [['kind', 'brand', 'sample', 'serial_number'], 'string', 'max' => 255],
@@ -79,5 +79,26 @@ class Equipment extends \yii\db\ActiveRecord
     public function getOrders()
     {
         return $this->hasMany(Order::className(), ['equipment_id' => 'id']);
+    }
+
+    /**
+     * @param bool $insert
+     * @return bool
+     */
+    public function beforeSave($insert)
+    {
+        $kind = Kind::getByName($this->kind);
+        $brand = Brand::getByName($this->brand);
+        if ($kind&&$brand) {
+            $this->kind = $kind->name;
+            $this->brand = $brand->name;
+            if (($sample = Sample::getByName($this->sample, $brand))!==null)
+            {
+                $this->sample = $sample->name;
+                return parent::beforeSave($insert);
+            }
+            return false;
+        }
+        return false;
     }
 }

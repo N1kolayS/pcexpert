@@ -44,16 +44,19 @@ class Order extends \yii\db\ActiveRecord
 
     /**
      * @return array
-     *
+     */
     public function behaviors()
     {
         return [
-            'class' => TimestampBehavior::className(),
-            'createdAtAttribute' => 'created_at',
-            'updatedAtAttribute' => null,
-            'value' => date('Y-m-d H:i:s'),
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_at',
+                'updatedAtAttribute' => null,
+                'value' => date('Y-m-d H:i:s'),
+            ],
         ];
     }
+
 
     /**
      * {@inheritdoc}
@@ -62,7 +65,7 @@ class Order extends \yii\db\ActiveRecord
     {
         return [
             [['created_at', 'hired_at', 'closed_at'], 'safe'],
-            [['equipment_id', 'client_id', 'manager_id'], 'required'],
+            [['equipment_id', 'client_id'], 'required'],
             [['equipment_id', 'client_id', 'manager_id', 'master', 'status', 'placement'], 'integer'],
             [['problems', 'comment'], 'string'],
             [['prepayment', 'cost'], 'number'],
@@ -144,7 +147,9 @@ class Order extends \yii\db\ActiveRecord
      */
     public function beforeSave($insert)
     {
-        $this->manager_id = Yii::$app->user->id;
+        if ($this->isNewRecord) {
+            $this->manager_id = Yii::$app->user->id;
+        }
         return parent::beforeSave($insert);
     }
 

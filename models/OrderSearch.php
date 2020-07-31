@@ -11,6 +11,8 @@ use app\models\Order;
  */
 class OrderSearch extends Order
 {
+    public $client_fio;
+
     /**
      * {@inheritdoc}
      */

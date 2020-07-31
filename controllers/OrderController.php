@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Brand;
+use app\models\Client;
 use app\models\CreateOrder;
 use app\models\Kind;
 use app\models\Sample;
@@ -81,59 +82,102 @@ class OrderController extends Controller
     }
 
     /**
-     * @param $q
+     * Получить типы оборудования под jquery autocomplete
+     * @param $term
      * @return array[]|\string[][]
      */
-    public function actionAjaxGetEquipmentKind($q)
+    public function actionAjaxGetEquipmentKind($term)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $data =  ['id' => '', 'text' => ''];
-        if ($q)
+        $data =  [];
+        if ($term)
         {
-            $data = [];
-            $models = Kind::find()->where(['like', 'name', $q])->limit(20)->all();
+            /**
+             * @var $models Kind[]
+             */
+            $models = Kind::find()->where(['like', 'name', $term])->limit(20)->all();
             foreach ($models as $model)
             {
-                $data[] = ['id' => $model->id, 'text' => $model->name];
+                $data[] = ['id' => $model->id, 'label' => $model->name];
             }
         }
-        return ['results' => $data];
+        return $data;
     }
 
     /**
-     * @param $q
+     * @param $term
      * @return array[]|\string[][]
      */
-    public function actionAjaxGetEquipmentBrand($q)
+    public function actionAjaxGetEquipmentBrand($term)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $data =  ['id' => '', 'text' => ''];
-        if ($q)
+        $data = [];
+        if ($term)
         {
-            $data = [];
-            $models = Brand::find()->where(['like', 'name', $q])->limit(20)->all();
+            /**
+             * @var $models Brand[]
+             */
+            $models = Brand::find()->where(['like', 'name', $term])->limit(20)->all();
             foreach ($models as $model)
             {
-                $data[] = ['id' => $model->id, 'text' => $model->name];
+                $data[] = ['id' => $model->id, 'label' => $model->name];
             }
         }
-        return ['results' => $data];
+        return $data;
     }
 
-    public function actionAjaxGetEquipmentSample($q)
+    /**
+     * @param $term
+     * @param $brand_id
+     * @return array[]
+     */
+    public function actionAjaxGetEquipmentSample($term, $brand_id)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $data =  ['id' => '', 'text' => ''];
-        if ($q)
+        $data = [];
+        if ($term)
         {
-            $data = [];
-            $models = Sample::find()->where(['like', 'name', $q])->limit(20)->all();
+            /**
+             * @var $models Sample[]
+             */
+            $models = Sample::find()->where(['like', 'name', $term])
+                ->andWhere(['brand_id' => $brand_id])->limit(20)->all();
             foreach ($models as $model)
             {
-                $data[] = ['id' => $model->id, 'text' => $model->name];
+                $data[] = ['id' => $model->id, 'label' => $model->name];
             }
         }
-        return ['results' => $data];
+        return $data;
+    }
+
+    /**
+     * Получить клиентов под jquery autocomplete
+     * @param $term
+     * @return array[]|\string[][]
+     */
+    public function actionAjaxGetClients($term)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $data = [];
+        if ($term)
+        {
+            $data = [];
+            /**
+             * @var $models Client[]
+             */
+            $models = Client::find()->where(['like', 'fio', $term])->limit(20)->all();
+            foreach ($models as $model)
+            {
+                $data[] = [
+                    'id' => $model->id,
+                    'fio' => $model->fio,
+                    'label' => $model->fio. ' '. $model->phoneFormat,
+                    'phone' => $model->phone,
+                    'comment' => $model->comment
+                ];
+            }
+        }
+        return $data;
     }
 
     /**

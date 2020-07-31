@@ -52,4 +52,22 @@ class Brand extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Sample::className(), ['brand_id' => 'id']);
     }
+
+    /**
+     * Получить производителя по имени,
+     * в случае отсутствия такого имени, создать производителя
+     * @param $name
+     * @return Brand|null
+     */
+    public static function getByName($name)
+    {
+        $model = self::findOne(['name' => $name]);
+        if (!$model)
+        {
+            $model = new Brand();
+            $model->name = $name;
+            $model->save();
+        }
+        return $model;
+    }
 }

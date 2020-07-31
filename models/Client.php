@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "{{%client}}".
@@ -18,6 +19,7 @@ use Yii;
  * @property int|null $legal
  *
  * @property User $creator
+ * @property string $phoneFormat - отформатированный номер телефон 8 (123) 456-7890
  */
 class Client extends \yii\db\ActiveRecord
 {
@@ -30,13 +32,39 @@ class Client extends \yii\db\ActiveRecord
     }
 
     /**
+     * @return array
+     */
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_at',
+                'updatedAtAttribute' => null,
+                'value' => date('Y-m-d H:i:s'),
+            ],
+        ];
+    }
+
+    /**
+     * @return string
+     */
+    public function getPhoneFormat()
+    {
+        $area =   substr($this->phone,1,3);
+        $prefix = substr($this->phone,4,3);
+        $number = substr($this->phone,7,4);
+        return "8 ($area) $prefix-$number";
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
             [['created_at'], 'safe'],
-            [['creator_id'], 'required'],
+            [['fio', 'phone'], 'required'],
             [['creator_id', 'status', 'rating', 'legal'], 'integer'],
             [['comment'], 'string'],
             [['fio', 'phone'], 'string', 'max' => 255],
@@ -70,5 +98,17 @@ class Client extends \yii\db\ActiveRecord
     public function getCreator()
     {
         return $this->hasOne(User::className(), ['id' => 'creator_id']);
+    }
+
+    /**
+     * @param bool $insert
+     * @return bool
+     */
+    public function beforeSave($insert)
+    {
+        if ($this->isNewRecord) {
+            $this->creator_id = Yii::$app->user->id;
+        }
+        return parent::beforeSave($insert);
     }
 }

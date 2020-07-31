@@ -57,4 +57,22 @@ class Sample extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Brand::className(), ['id' => 'brand_id']);
     }
+
+    /**
+     * @param $name
+     * @param Brand $brand
+     * @return Sample|Sample
+     */
+    public static function getByName($name, Brand $brand)
+    {
+        $model = self::findOne(['name' => $name]);
+        if (!$model)
+        {
+            $model = new Sample();
+            $model->brand_id = $brand->id;
+            $model->name = $name;
+            $model->save();
+        }
+        return $model;
+    }
 }
