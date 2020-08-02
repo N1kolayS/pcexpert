@@ -12,6 +12,14 @@ use app\models\Order;
 class OrderSearch extends Order
 {
     public $client_fio;
+    public $date_from;
+    public $date_to;
+    public $date_range;
+    public $clientFio;
+    public $clientPhone;
+    public $equipmentKind;
+    public $equipmentBrand;
+    public $equipmentSample;
 
     /**
      * {@inheritdoc}
@@ -19,9 +27,11 @@ class OrderSearch extends Order
     public function rules()
     {
         return [
-            [['id', 'equipment_id', 'client_id', 'manager_id', 'master', 'status', 'placement'], 'integer'],
-            [['created_at', 'hired_at', 'closed_at', 'problems', 'complect', 'comment'], 'safe'],
+            [['id', 'equipment_id', 'client_id', 'manager_id', 'master_id', 'status', 'placement'], 'integer'],
+            [['created_at', 'hired_at', 'closed_at', 'problems', 'kit', 'comment'], 'safe'],
             [['prepayment', 'cost'], 'number'],
+            [['date_from', 'date_to'], 'date', 'format' => 'php:Y-m-d'],
+            [['date_range', 'clientFio', 'clientPhone', 'equipmentKind', 'equipmentBrand', 'equipmentSample'], 'string']
         ];
     }
 
@@ -68,7 +78,7 @@ class OrderSearch extends Order
             'equipment_id' => $this->equipment_id,
             'client_id' => $this->client_id,
             'manager_id' => $this->manager_id,
-            'master' => $this->master,
+            'master_id' => $this->master_id,
             'status' => $this->status,
             'placement' => $this->placement,
             'prepayment' => $this->prepayment,
@@ -76,8 +86,10 @@ class OrderSearch extends Order
         ]);
 
         $query->andFilterWhere(['like', 'problems', $this->problems])
-            ->andFilterWhere(['like', 'complect', $this->complect])
-            ->andFilterWhere(['like', 'comment', $this->comment]);
+            ->andFilterWhere(['like', 'kit', $this->kit])
+            ->andFilterWhere(['like', 'comment', $this->comment])
+            ->andFilterWhere(['>=', 'created_at', $this->date_from])
+            ->andFilterWhere(['<=', 'created_at', $this->date_to ]);
 
         return $dataProvider;
     }

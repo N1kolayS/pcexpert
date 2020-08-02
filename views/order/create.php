@@ -8,7 +8,8 @@ use yii\helpers\Url;
 use yii\web\JsExpression;
 use app\models\Order;
 use yii\jui\AutoComplete;
-
+use yii\helpers\ArrayHelper;
+use app\models\Library;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\CreateOrder */
@@ -24,6 +25,9 @@ let client_phone  = $("#createorder-client_phone");
 let client_comment = $("#createorder-client_comment");
 let btn_reset_client = $("#btn_reset_client");
 let equipment_kind = $("#createorder-equipment_kind");
+let equipment_brand = $("#createorder-equipment_brand");
+let equipment_sample = $("#createorder-equipment_sample");
+let equipment_serial_number = $("#createorder-equipment_serial_number");
 let brand_id;
 
     function setClient(item) {
@@ -118,6 +122,11 @@ $this->registerCss($css);
                     ->widget(AutoComplete::classname(), [
                         'clientOptions' => [
                             'source' => Url::to(['ajax-get-equipment-kind']),
+                            'select' =>new JsExpression('function(event, ui) {
+                                this.value = ui.item.label;
+                                equipment_brand.focus();
+                                return false;
+                            }'),
                             'minLength' => 2,
                         ],
                         'options' => [
@@ -135,6 +144,7 @@ $this->registerCss($css);
                             'select' =>new JsExpression('function(event, ui) {
                                 this.value = ui.item.label;
                                 brand_id = ui.item.id;
+                                equipment_sample.focus();
                                 return false;
                             }')
                         ],
@@ -165,10 +175,21 @@ $this->registerCss($css);
                     ])->label(false) ?>
 
                 <?= $form->field($model, 'equipment_serial_number')
-                    ->textInput(['maxlength' => true, 'placeholder' => 'Серийный номер'])->label(false) ?>
+                    ->textInput(['maxlength' => true, 'placeholder' => $model->getAttributeLabel('equipment_serial_number')])->label(false) ?>
 
-                <?= $form->field($model, 'complect')
-                    ->textInput(['maxlength' => true, 'placeholder' => $model->attributeLabels()['complect']])->label(false) ?>
+                <?= $form->field($model, 'kit')
+                    ->widget(Select2::classname(), [
+                        'data' => ArrayHelper::map(Library::listKits(), 'name','name'),
+                        'options' => [
+                                'placeholder' => $model->getAttributeLabel('kit'),
+                            'multiple'=>true
+                        ],
+                        'pluginOptions' => [
+                            'allowClear' => true,
+                            'tags' => true,
+                            'tokenSeparators' => [',', '.'],
+                        ],
+                    ])->label(false) ?>
             </div>
         </div>
     </div>
@@ -198,7 +219,19 @@ $this->registerCss($css);
             </div>
             <div class="box-body">
                 <?= $form->field($model, 'problems')
-                    ->textarea(['maxlength' => true, 'placeholder' => $model->attributeLabels()['problems'] ])->label(false) ?>
+                    ->widget(Select2::classname(), [
+                        'data' => ArrayHelper::map(Library::listProblems(), 'name','name'),
+                        'options' => [
+                            'placeholder' => $model->getAttributeLabel('problems'),
+                            'multiple'=>true
+                        ],
+                        'pluginOptions' => [
+                            'allowClear' => true,
+                            'tags' => true,
+                            'tokenSeparators' => [',', '.'],
+                        ],
+                    ])->label(false)
+                     ?>
 
 
             </div>

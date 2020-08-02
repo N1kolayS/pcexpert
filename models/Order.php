@@ -15,11 +15,11 @@ use yii\behaviors\TimestampBehavior;
  * @property int $equipment_id
  * @property int $client_id
  * @property int $manager_id
- * @property int|null $master
+ * @property int|null $master_id
  * @property int|null $status
  * @property int|null $placement
  * @property string|null $problems
- * @property string|null $complect
+ * @property string|null $kit
  * @property float|null $prepayment
  * @property float|null $cost
  * @property string|null $comment
@@ -33,6 +33,11 @@ class Order extends \yii\db\ActiveRecord
 
     const PLACEMENT_OFFICE = 1;
     const PLACEMENT_CLIENT = 2;
+
+    const STATUS_PLANNING = 1;
+    const STATUS_RUNNING  = 2;
+    const STATUS_FINISHED = 3;
+
 
     /**
      * {@inheritdoc}
@@ -66,10 +71,10 @@ class Order extends \yii\db\ActiveRecord
         return [
             [['created_at', 'hired_at', 'closed_at'], 'safe'],
             [['equipment_id', 'client_id'], 'required'],
-            [['equipment_id', 'client_id', 'manager_id', 'master', 'status', 'placement'], 'integer'],
+            [['equipment_id', 'client_id', 'manager_id', 'master_id', 'status', 'placement'], 'integer'],
             [['problems', 'comment'], 'string'],
             [['prepayment', 'cost'], 'number'],
-            [['complect'], 'string', 'max' => 255],
+            [['kit'], 'string', 'max' => 255],
             [['client_id'], 'exist', 'skipOnError' => true, 'targetClass' => Client::className(), 'targetAttribute' => ['client_id' => 'id']],
             [['equipment_id'], 'exist', 'skipOnError' => true, 'targetClass' => Equipment::className(), 'targetAttribute' => ['equipment_id' => 'id']],
             [['manager_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['manager_id' => 'id']],
@@ -89,14 +94,14 @@ class Order extends \yii\db\ActiveRecord
             'equipment_id' => 'Equipment ID',
             'client_id' => 'Client ID',
             'manager_id' => 'Manager ID',
-            'master' => 'Master',
+            'master_id' => 'Master',
             'status' => 'Status',
             'placement' => 'Placement',
             'problems' => 'Problems',
-            'complect' => 'Complect',
+            'kit' => 'Комплектация',
             'prepayment' => 'Prepayment',
             'cost' => 'Cost',
-            'comment' => 'Comment',
+            'comment' => 'Примечания',
         ];
     }
 

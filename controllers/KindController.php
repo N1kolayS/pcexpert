@@ -2,9 +2,11 @@
 
 namespace app\controllers;
 
+use app\models\User;
 use Yii;
 use app\models\Kind;
 use app\models\KindSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -20,6 +22,16 @@ class KindController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['index', 'update', 'create', 'delete', 'view'],
+                        'allow' => true,
+                        'roles' => [User::ROLE_REPAIRER],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -44,18 +56,6 @@ class KindController extends Controller
         ]);
     }
 
-    /**
-     * Displays a single Kind model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
 
     /**
      * Creates a new Kind model.
@@ -67,7 +67,8 @@ class KindController extends Controller
         $model = new Kind();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            Yii::$app->session->setFlash('success', "Материал успешно создан");
+            return $this->redirect(['index']);
         }
 
         return $this->render('create', [
@@ -87,7 +88,8 @@ class KindController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            Yii::$app->session->setFlash('success', "Материал успешно изменен");
+            return $this->redirect(['index']);
         }
 
         return $this->render('update', [

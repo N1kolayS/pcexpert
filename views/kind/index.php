@@ -7,31 +7,35 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\KindSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Kinds';
+
+$this->title = 'Виды техники';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="kind-index">
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <?= Html::a('Создать', ['create'], ['class' => 'btn btn-success']) ?>
+    </div>
+    <div class="box-body">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+        <?= GridView::widget([
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'columns' => [
 
-    <p>
-        <?= Html::a('Create Kind', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+                'id',
+                [
+                    'attribute' => 'name',
+                    'content' => function ($model) {
+                        return Html::a($model->name, ['update', 'id' => $model->id]);
+                    }
+                ],
 
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'template' => '{delete}'
+                ],
+            ],
+        ]); ?>
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'name',
-
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
-
-
+    </div>
 </div>

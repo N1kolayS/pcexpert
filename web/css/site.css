@@ -113,3 +113,8 @@ a.desc:after {
 .nav > li > form > button.logout:focus {
     outline: none;
 }
+
+/* Fix select2 input vertical position */
+.select2-container .select2-selection--single .select2-selection__rendered {
+    margin-top: 0 !important;
+}

@@ -24,11 +24,12 @@ class CreateOrder extends Model
     public $equipment_sample;
     public $equipment_serial_number;
 
-    public $complect;
+    public $kit;
     public $problems;
     public $placement;
     public $prepayment;
     public $comment;
+
 
     /**
      * {@inheritdoc}
@@ -45,11 +46,12 @@ class CreateOrder extends Model
             ['client_phone', 'is10NumbersOnly'],
 
             [['equipment_kind', 'equipment_brand', 'equipment_sample', 'equipment_serial_number' ], 'string', 'min' => 1, 'max' => 255],
-            [['equipment_kind', 'equipment_brand', 'equipment_sample' ], 'required'],
+            [['equipment_kind', 'equipment_brand', 'equipment_sample', 'equipment_serial_number', 'problems' ], 'required'],
 
-            [['client_id', 'equipment_id'], 'integer'],
+            [['client_id', 'equipment_id', 'placement'], 'integer'],
 
-            [['complect', 'problems', 'comment'], 'string'],
+            [['comment', 'prepayment'], 'string'],
+            [['kit', 'problems'], 'safe'],
 
         ];
     }
@@ -82,10 +84,14 @@ class CreateOrder extends Model
             'client_phone' => 'Телефон',
             'client_comment' => 'Комментарий',
             'problems' => 'Проблемы',
-            'complect' => 'Комплектация',
+            'kit' => 'Комплектация',
             'comment' => 'Комментарий',
 
-            'equipment_kind' => 'Вид техники'
+
+            'equipment_kind' => 'Вид техники',
+            'equipment_brand' => 'Производитель',
+            'equipment_sample' => 'Модель',
+            'equipment_serial_number' => 'Серийный номер',
         ];
     }
 
@@ -94,6 +100,7 @@ class CreateOrder extends Model
      */
     public function add()
     {
+
         if (!$this->validate()) {
             return null;
         }
@@ -110,8 +117,8 @@ class CreateOrder extends Model
         $order->equipment_id = $equipment->id;
         $order->client_id = $client->id;
         $order->comment = $this->comment;
-        $order->problems = $this->problems;
-        $order->complect = $this->complect;
+        $order->problems = implode(', ', $this->problems);
+        $order->kit = implode(', ', $this->kit);
         $order->prepayment = $this->prepayment;
         $order->placement = $this->placement;
         if ($order->save())
@@ -122,7 +129,6 @@ class CreateOrder extends Model
             $this->addErrors($order->errors);
             return null;
         }
-        //return $order->save() ? $order : null;
 
     }
 

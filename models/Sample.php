@@ -15,6 +15,9 @@ use Yii;
  */
 class Sample extends \yii\db\ActiveRecord
 {
+
+
+
     /**
      * {@inheritdoc}
      */
@@ -29,7 +32,7 @@ class Sample extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['brand_id'], 'required'],
+            [['brand_id', 'name'], 'required'],
             [['brand_id'], 'integer'],
             [['name'], 'string', 'max' => 255],
             [['brand_id'], 'exist', 'skipOnError' => true, 'targetClass' => Brand::className(), 'targetAttribute' => ['brand_id' => 'id']],
@@ -43,8 +46,8 @@ class Sample extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'brand_id' => 'Brand ID',
-            'name' => 'Name',
+            'brand_id' => 'Производитель',
+            'name' => 'Название',
         ];
     }
 

@@ -4,17 +4,17 @@ namespace app\controllers;
 
 use app\models\User;
 use Yii;
-use app\models\Equipment;
-use app\models\EquipmentSearch;
+use app\models\Library;
+use app\models\LibrarySearch;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * EquipmentController implements the CRUD actions for Equipment model.
+ * LibraryController implements the CRUD actions for Library model.
  */
-class EquipmentController extends Controller
+class LibraryController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -42,12 +42,12 @@ class EquipmentController extends Controller
     }
 
     /**
-     * Lists all Equipment models.
+     * Lists all Library models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new EquipmentSearch();
+        $searchModel = new LibrarySearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -56,23 +56,28 @@ class EquipmentController extends Controller
         ]);
     }
 
+
     /**
-     * Displays a single Equipment model.
-     * @param integer $id
+     * Creates a new Library model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
+    public function actionCreate()
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
+        $model = new Library();
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('success', "Материал успешно создан");
+            return $this->redirect(['index']);
+        }
+
+        return $this->render('create', [
+            'model' => $model,
         ]);
     }
 
-
-
     /**
-     * Updates an existing Equipment model.
+     * Updates an existing Library model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -83,7 +88,8 @@ class EquipmentController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            Yii::$app->session->setFlash('success', "Материал успешно изменен");
+            return $this->redirect(['index']);
         }
 
         return $this->render('update', [
@@ -92,7 +98,7 @@ class EquipmentController extends Controller
     }
 
     /**
-     * Deletes an existing Equipment model.
+     * Deletes an existing Library model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -106,15 +112,15 @@ class EquipmentController extends Controller
     }
 
     /**
-     * Finds the Equipment model based on its primary key value.
+     * Finds the Library model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Equipment the loaded model
+     * @return Library the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Equipment::findOne($id)) !== null) {
+        if (($model = Library::findOne($id)) !== null) {
             return $model;
         }
 

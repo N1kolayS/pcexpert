@@ -32,7 +32,7 @@ class User extends ActiveRecord implements IdentityInterface
     const ROLE_ADMIN = 'admin';
     const ROLE_MANAGER = 'manager';
     const ROLE_OPERATOR = 'operator';
-    const ROLE_MASTER = 'master';
+    const ROLE_REPAIRER = 'repairer';
     const ROLE_DEFAULT = 'user';
 
     /**
@@ -232,7 +232,7 @@ class User extends ActiveRecord implements IdentityInterface
             self::ROLE_ADMIN => 'Администратор',
             self::ROLE_MANAGER => 'Менеджер',
             self::ROLE_OPERATOR => 'Оператор',
-            self::ROLE_MASTER => 'Мастер',
+            self::ROLE_REPAIRER => 'Мастер',
             self::ROLE_DEFAULT => 'Оператор',
         ];
     }

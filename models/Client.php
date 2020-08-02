@@ -51,10 +51,18 @@ class Client extends \yii\db\ActiveRecord
      */
     public function getPhoneFormat()
     {
-        $area =   substr($this->phone,1,3);
-        $prefix = substr($this->phone,4,3);
-        $number = substr($this->phone,7,4);
+        $area =   substr($this->phone,0,3);
+        $prefix = substr($this->phone,3,3);
+        $number = substr($this->phone,6);
         return "8 ($area) $prefix-$number";
+    }
+
+    /**
+     * @return bool
+     */
+    public function beforeValidate() {
+        $this->phone = str_replace('-', null, $this->phone);
+        return parent::beforeValidate();
     }
 
     /**
@@ -80,10 +88,10 @@ class Client extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'created_at' => 'Created At',
-            'creator_id' => 'Creator ID',
-            'fio' => 'Fio',
-            'phone' => 'Phone',
-            'status' => 'Status',
+            'creator_id' => 'Создан',
+            'fio' => 'ФИО',
+            'phone' => 'Телефон',
+            'status' => 'Статус',
             'rating' => 'Rating',
             'comment' => 'Comment',
             'legal' => 'Legal',

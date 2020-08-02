@@ -4,10 +4,10 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\BrandSearch */
+/* @var $searchModel app\models\LibrarySearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Производители';
+$this->title = 'Библиотеки';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box box-primary">
@@ -28,6 +28,12 @@ $this->params['breadcrumbs'][] = $this->title;
                         return Html::a($model->name, ['update', 'id' => $model->id]);
                     }
                 ],
+                [
+                    'attribute' => 'type',
+                    'content' => function ($model) {
+                        return $model->typeLabel;
+                    }
+                ],
 
                 [
                     'class' => 'yii\grid\ActionColumn',
@@ -38,3 +44,4 @@ $this->params['breadcrumbs'][] = $this->title;
 
     </div>
 </div>
+

@@ -1,24 +1,24 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use yii\bootstrap\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Client */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-
-<div class="client-form">
-
-    <?php $form = ActiveForm::begin(); ?>
-
-    <?= $form->field($model, 'created_at')->textInput() ?>
-
-    <?= $form->field($model, 'creator_id')->textInput() ?>
+<?php $form = ActiveForm::begin(); ?>
+<div class="box-body">
 
     <?= $form->field($model, 'fio')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'phone')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'phone', [
+        'inputTemplate' => '<div class="input-group"><span class="input-group-addon">8</span>{input}</div>',
+    ])->widget(\yii\widgets\MaskedInput::className(), [
+        'name' => 'phone',
+        'mask' => '999-999-9999',
+
+    ]) ?>
 
     <?= $form->field($model, 'status')->textInput() ?>
 
@@ -27,11 +27,9 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'comment')->textarea(['rows' => 6]) ?>
 
     <?= $form->field($model, 'legal')->textInput() ?>
-
-    <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
-    </div>
-
-    <?php ActiveForm::end(); ?>
-
 </div>
+<div class="box-footer">
+    <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
+</div>
+
+<?php ActiveForm::end(); ?>

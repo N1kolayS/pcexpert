@@ -27,6 +27,8 @@ class InitController extends Controller
     {
         \Yii::$app->runAction('migrate', ['migrationPath' => '@yii/rbac/migrations/']);
 
+        Yii::$app->authManager->removeAll();
+
         $role = Yii::$app->authManager->createRole(User::ROLE_ADMIN);
         $role->description = 'Администратор';
         Yii::$app->authManager->add($role);
@@ -39,7 +41,7 @@ class InitController extends Controller
         $role->description = 'Оператор';
         Yii::$app->authManager->add($role);
 
-        $role = Yii::$app->authManager->createRole(User::ROLE_MASTER);
+        $role = Yii::$app->authManager->createRole(User::ROLE_REPAIRER);
         $role->description = 'Мастер';
         Yii::$app->authManager->add($role);
 
@@ -48,21 +50,22 @@ class InitController extends Controller
         Yii::$app->authManager->add($role);
 
         // Implement
-        $role_admin = Yii::$app->authManager->getRole('admin');
-        $role_manager = Yii::$app->authManager->getRole('manager');
-        $role_operator = Yii::$app->authManager->getRole('operator');
-        $role_master = Yii::$app->authManager->getRole('master');
-        $role_user = Yii::$app->authManager->getRole('user');
+        $role_admin = Yii::$app->authManager->getRole(User::ROLE_ADMIN);
+        $role_manager = Yii::$app->authManager->getRole(User::ROLE_MANAGER);
+        $role_operator = Yii::$app->authManager->getRole(User::ROLE_OPERATOR);
+        $role_repairer = Yii::$app->authManager->getRole(User::ROLE_REPAIRER);
+        $role_user = Yii::$app->authManager->getRole(User::ROLE_DEFAULT);
         Yii::$app->authManager->addChild($role_admin, $role_manager);
         Yii::$app->authManager->addChild($role_manager, $role_operator);
-        Yii::$app->authManager->addChild($role_operator, $role_master);
-        Yii::$app->authManager->addChild($role_master, $role_user);
+        Yii::$app->authManager->addChild($role_operator, $role_repairer);
+        Yii::$app->authManager->addChild($role_repairer, $role_user);
         /* */
         echo 'Управление правами успешно создано'. PHP_EOL;
         echo 'Запустить "yii init/user-create Имя пароль email" для создания пользователя'. PHP_EOL;
     }
 
     /**
+     * Создать пароль
      * @param $username
      * @param $password
      * @param $email
@@ -98,10 +101,13 @@ class InitController extends Controller
         {
             echo 'Roles not assigned, run init/rbac '.PHP_EOL;
         }
-
-
     }
 
+    /**
+     * Изменить пароль
+     * @param $username
+     * @param $password
+     */
     public function actionChangePass($username, $password)
     {
         $user = User::findByUsername($username);

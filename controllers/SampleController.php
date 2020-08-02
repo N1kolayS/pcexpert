@@ -2,12 +2,16 @@
 
 namespace app\controllers;
 
+use app\models\Brand;
+use app\models\User;
 use Yii;
 use app\models\Sample;
 use app\models\SampleSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /**
  * SampleController implements the CRUD actions for Sample model.
@@ -20,6 +24,16 @@ class SampleController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['index', 'update', 'create', 'delete', 'ajax-get-brand'],
+                        'allow' => true,
+                        'roles' => [User::ROLE_REPAIRER],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -44,18 +58,8 @@ class SampleController extends Controller
         ]);
     }
 
-    /**
-     * Displays a single Sample model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
+
+
 
     /**
      * Creates a new Sample model.
@@ -67,7 +71,8 @@ class SampleController extends Controller
         $model = new Sample();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            Yii::$app->session->setFlash('success', "Материал успешно изменен");
+            return $this->redirect(['index']);
         }
 
         return $this->render('create', [
@@ -87,12 +92,36 @@ class SampleController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            Yii::$app->session->setFlash('success', "Материал успешно изменен");
+            return $this->redirect(['index']);
         }
 
         return $this->render('update', [
             'model' => $model,
         ]);
+    }
+
+    /**
+     * Варианты техники для Select2
+     * @param $q
+     * @return array[]
+     */
+    public function actionAjaxGetBrand($q)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $data =  [];
+        if ($q)
+        {
+            /**
+             * @var $models Brand[]
+             */
+            $models = Brand::find()->where(['like', 'name', $q])->limit(20)->all();
+            foreach ($models as $model)
+            {
+                $data[] = ['id' => $model->id, 'text' => $model->name];
+            }
+        }
+        return ['results' => $data];
     }
 
     /**

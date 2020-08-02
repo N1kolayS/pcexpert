@@ -39,7 +39,7 @@ class Brand extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
+            'name' => 'Название',
         ];
     }
 
@@ -69,5 +69,13 @@ class Brand extends \yii\db\ActiveRecord
             $model->save();
         }
         return $model;
+    }
+
+    /**
+     * @return Brand[]|\yii\db\ActiveRecord[]
+     */
+    public static function listAll()
+    {
+        return self::find()->all();
     }
 }

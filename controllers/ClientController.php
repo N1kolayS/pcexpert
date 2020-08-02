@@ -2,12 +2,15 @@
 
 namespace app\controllers;
 
+use app\models\User;
 use Yii;
 use app\models\Client;
 use app\models\ClientSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /**
  * ClientController implements the CRUD actions for Client model.
@@ -20,6 +23,16 @@ class ClientController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['index', 'update', 'create', 'delete', 'ajax-get'],
+                        'allow' => true,
+                        'roles' => [User::ROLE_REPAIRER],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -44,18 +57,6 @@ class ClientController extends Controller
         ]);
     }
 
-    /**
-     * Displays a single Client model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
 
     /**
      * Creates a new Client model.
@@ -67,7 +68,8 @@ class ClientController extends Controller
         $model = new Client();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            Yii::$app->session->setFlash('success', "Клиент успешно создан");
+            return $this->redirect(['index']);
         }
 
         return $this->render('create', [
@@ -87,7 +89,9 @@ class ClientController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            Yii::$app->session->setFlash('success', "Клиент успешно изменен");
+            return $this->redirect(['index']);
+
         }
 
         return $this->render('update', [
@@ -107,6 +111,28 @@ class ClientController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    /**
+     * @param $q
+     * @return array[]
+     */
+    public function actionAjaxGet($q)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $data =  [];
+        if ($q)
+        {
+            /**
+             * @var $models Client[]
+             */
+            $models = Client::find()->where(['like', 'fio', $q])->limit(20)->all();
+            foreach ($models as $model)
+            {
+                $data[] = ['id' => $model->fio, 'text' => $model->fio];
+            }
+        }
+        return ['results' => $data];
     }
 
     /**

@@ -7,9 +7,11 @@ use app\models\Client;
 use app\models\CreateOrder;
 use app\models\Kind;
 use app\models\Sample;
+use app\models\User;
 use Yii;
 use app\models\Order;
 use app\models\OrderSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -26,6 +28,17 @@ class OrderController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['index', 'update', 'create', 'delete',
+                            'ajax-get-equipment-kind', 'ajax-get-equipment-brand', 'ajax-get-equipment-sample', 'ajax-get-equipment-clients'],
+                        'allow' => true,
+                        'roles' => [User::ROLE_REPAIRER],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

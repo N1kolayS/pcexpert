@@ -5,8 +5,7 @@
 
 use app\widgets\Alert;
 use yii\helpers\Html;
-use yii\bootstrap\Nav;
-use yii\bootstrap\NavBar;
+
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 
@@ -36,27 +35,41 @@ AppAsset::register($this);
                     <span class="sr-only">Min</span>
                 </a>
                 <div class="navbar-custom-menu">
-                    <div class="pull-right">
 
-                        <?= Html::a('Выход',['/site/logout'],['data-method' => 'post', 'class' => 'btn btn-default btn-flat','id'=>'button_logout']) ?>
+                    <ul class="nav navbar-nav">
+                        <li><?=Html::a('Создать заявку', ['order/create'])?></li>
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                <img src="/images/pcexpert160.jpg" class="user-image" alt="User Image">
+                                <span class="hidden-xs"><?=Yii::$app->user->identity->username?></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- User image -->
+                                <li class="user-header">
+                                    <img src="/images/pcexpert160.jpg" class="img-circle" alt="User Image">
 
-                    </div>
+                                </li>
+
+                                <!-- Menu Footer-->
+                                <li class="user-footer">
+                                    <div class="pull-left">
+                                        <a href="#" class="btn btn-default btn-flat">Profile</a>
+                                    </div>
+                                    <div class="pull-right">
+                                        <?= Html::a('Выход',['/site/logout'],['data-method' => 'post', 'class' => 'btn btn-default btn-flat','id'=>'button_logout']) ?>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+
                 </div>
             </nav>
         </header>
         <aside class="main-sidebar">
-            <!--
-        <section class="sidebar">
-            <div class="user-panel">
-                <div class="pull-left image">
-                    <br>
-                   </div>
-                <div class="pull-left info">
-                    <p><?= !(Yii::$app->user->isGuest) ? Yii::$app->user->identity->username : ''?></p>
-                </div>
-            </div>
-        </section>
-        -->
+
+
+
             <section class="sidebar">
 
                 <?= dmstr\widgets\Menu::widget(
@@ -68,8 +81,9 @@ AppAsset::register($this);
                             ['label' => 'Техника', 'icon' => 'laptop', 'url' => ['/equipment/index']],
                             ['label' => 'Справочники', 'icon' => 'folder-o', 'url' => '#', 'items' => [
                                 ['label' => 'Виды техники', 'icon' => 'file-text-o', 'url' => ['/kind/index']],
-                                ['label' => 'Бренды', 'icon' => 'file-text-o', 'url' => ['/brand/index']],
+                                ['label' => 'Производители', 'icon' => 'file-text-o', 'url' => ['/brand/index']],
                                 ['label' => 'Модели', 'icon' => 'file-text-o', 'url' => ['/sample/index']],
+                                ['label' => 'Бибилиотеки', 'icon' => 'file-text-o', 'url' => ['/library/index']],
                             ]],
                             ['label' => 'Admin'],
                             ['label' => 'Пользователи', 'icon' => 'user-secret', 'url' => ['/user/index']],
@@ -85,9 +99,11 @@ AppAsset::register($this);
 
             <!-- Content Header (Page header) -->
             <section  class="content-header">
+
                 <h1>
                     <?=$this->title?>
                 </h1>
+                <?= Alert::widget() ?>
                 <?php
                 echo Breadcrumbs::widget([
                     'homeLink' => [
@@ -104,6 +120,7 @@ AppAsset::register($this);
 
             <!-- Main content -->
             <section class="content">
+
                 <?= $content ?>
             </section>
 
