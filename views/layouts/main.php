@@ -67,16 +67,13 @@ AppAsset::register($this);
             </nav>
         </header>
         <aside class="main-sidebar">
-
-
-
             <section class="sidebar">
-
                 <?= dmstr\widgets\Menu::widget(
                     [
                         'options' => ['class' => 'sidebar-menu tree', 'data-widget'=> 'tree'],
                         'items' => [
                             ['label' => 'Заявки', 'icon' => 'tasks', 'url' => ['/order/index']],
+                            ['label' => 'Архив', 'icon' => 'archive', 'url' => ['/order/archive']],
                             ['label' => 'Клиенты', 'icon' => 'users', 'url' => ['/client/index']],
                             ['label' => 'Техника', 'icon' => 'laptop', 'url' => ['/equipment/index']],
                             ['label' => 'Справочники', 'icon' => 'folder-o', 'url' => '#', 'items' => [
@@ -86,11 +83,15 @@ AppAsset::register($this);
                                 ['label' => 'Бибилиотеки', 'icon' => 'file-text-o', 'url' => ['/library/index']],
                             ]],
                             ['label' => 'Admin'],
+                            ['label' => 'Стоимость услуг', 'icon' => 'money', 'url' => '#', 'items' => [
+                                ['label' => 'Категории', 'icon' => 'book', 'url' => ['/cat-service/index']],
+                                ['label' => 'Услуги', 'icon' => 'folder', 'url' => ['/service/index']],
+                            ]],
+                            ['label' => 'Шаблоны', 'icon' => 'folder-o', 'url' => '#', 'items' => \app\models\Template::menuList()],
                             ['label' => 'Пользователи', 'icon' => 'user-secret', 'url' => ['/user/index']],
                         ]
                     ]
                 )?>
-
             </section>
         </aside>
 
@@ -99,7 +100,6 @@ AppAsset::register($this);
 
             <!-- Content Header (Page header) -->
             <section  class="content-header">
-
                 <h1>
                     <?=$this->title?>
                 </h1>
@@ -115,17 +115,14 @@ AppAsset::register($this);
                     'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
                 ]);
                 ?>
-
             </section>
 
             <!-- Main content -->
             <section class="content">
-
                 <?= $content ?>
             </section>
 
         </div><!-- /.content-wrapper -->
-
         <footer class="main-footer">
             <div class="pull-right hidden-xs">
                 <b>Version</b>0.0.1 beta
@@ -133,7 +130,6 @@ AppAsset::register($this);
             <div class="text-center"><strong>Copyright &copy; <?=date('Y')?> PC Expert </strong> All rights reserved.</div>
         </footer>
     </div>
-
     <?php $this->endBody() ?>
     </body>
     </html>

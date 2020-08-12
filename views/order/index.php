@@ -34,6 +34,11 @@ $this->registerCss($css);
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'rowOptions'=>function (\app\models\Order  $model, $key, $index, $grid) {
+            return [
+                'class'=> $model->statusColor
+            ];
+        },
         'columns' => [
             [
                 'attribute' => 'id',
@@ -58,32 +63,32 @@ $this->registerCss($css);
                     ]
                 ]),
                 'attribute' => 'created_at',
-                'format' =>  ['date', 'long'],
+                'format' =>  ['date', 'php:d M Y H:i'],
                 'options' => ['width' => '185']
             ],
             [
-                'attribute' => 'equipmentKind',
+                'attribute' => 'equipment_kind',
                 'content' => function ($model) {
                     return $model->equipment->kind;
                 }
             ],
             [
-                'attribute' => 'equipmentBrand',
+                'attribute' => 'equipment_brand',
                 'content' => function ($model) {
                     return $model->equipment->brand;
                 }
             ],
             [
-                'attribute' => 'equipmentSample',
+                'attribute' => 'equipment_sample',
                 'content' => function ($model) {
                     return $model->equipment->sample;
                 }
             ],
             [
-                'attribute' => 'clientFio',
+                'attribute' => 'client_fio',
                 'filter' => Select2::widget([
                     'model' => $searchModel,
-                    'attribute' => 'clientFio',
+                    'attribute' => 'client_fio',
                     'initValueText' => ($searchModel->client) ? $searchModel->client->fio : '',
                     'theme' => Select2::THEME_BOOTSTRAP,
                     'options' => [
@@ -105,20 +110,27 @@ $this->registerCss($css);
                         ],
                     ],
                 ]),
-                'content' => function ($model) {
+                'content' => function (\app\models\Order $model) {
                     return $model->client->fio;
                 }
             ],
             [
-                'attribute' => 'clientPhone',
-                'content' => function ($model) {
-                    return $model->client->phone;
+                'attribute' => 'client_phone',
+                'content' => function (\app\models\Order $model) {
+                    return $model->client->phoneFormat;
                 }
             ],
             'comment',
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{update}'
+                'template' => '{update} {print}',
+                'buttons' => [
+                        'print' => function($url,$model,$key){
+                            return Html::a('<span class="glyphicon glyphicon-print"></span>',
+                                ['print/order', 'id' => $model->id],
+                            ['onclick' => "window.open(this.href, 'Печать Акта', 'height=600, width=800,toolbar=0,location=0,menubar=0'); return false;"]);
+                    }
+                ]
             ],
 
 

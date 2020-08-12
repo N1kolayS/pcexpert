@@ -87,7 +87,6 @@ class CreateOrder extends Model
             'kit' => 'Комплектация',
             'comment' => 'Комментарий',
 
-
             'equipment_kind' => 'Вид техники',
             'equipment_brand' => 'Производитель',
             'equipment_sample' => 'Модель',
@@ -118,7 +117,7 @@ class CreateOrder extends Model
         $order->client_id = $client->id;
         $order->comment = $this->comment;
         $order->problems = implode(', ', $this->problems);
-        $order->kit = implode(', ', $this->kit);
+        $order->kit = ($this->kit) ? implode(', ', $this->kit) : '';
         $order->prepayment = $this->prepayment;
         $order->placement = $this->placement;
         if ($order->save())

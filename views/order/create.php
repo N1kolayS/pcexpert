@@ -1,6 +1,6 @@
 <?php
 
-use app\models\CreateOrder;
+
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use kartik\select2\Select2;
@@ -10,6 +10,7 @@ use app\models\Order;
 use yii\jui\AutoComplete;
 use yii\helpers\ArrayHelper;
 use app\models\Library;
+use yii\widgets\MaskedInput;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\CreateOrder */
@@ -56,13 +57,7 @@ JS;
 
 $this->registerJs($js);
 
-$css = <<<CSS
-#block_reset_client {
 
-}
-CSS;
-
-$this->registerCss($css);
 ?>
 <?php $form = ActiveForm::begin(); ?>
 <div class="row">
@@ -96,12 +91,10 @@ $this->registerCss($css);
 
                 <?= $form->field($model, 'client_phone',  [
                     'inputTemplate' => '<div class="input-group"><span class="input-group-addon">8</span>{input}</div>',
-                ])
-                    ->widget(\yii\widgets\MaskedInput::className(), [
+                ])->widget(MaskedInput::className(), [
                         'name' => 'client_phone',
                         'mask' => '999-999-9999',
                         'options' => ['placeholder' => $model->getAttributeLabel('client_phone')]
-
                     ])->label(false) ?>
 
                 <?= $form->field($model, 'client_comment')
@@ -240,7 +233,7 @@ $this->registerCss($css);
 </div>
 <div class="row">
     <div class="col-md-12">
-        <?=var_dump($model->errors)?>
+
         <div class="form-group">
             <?= Html::submitButton('Создать', ['class' => 'btn btn-success']) ?>
         </div>

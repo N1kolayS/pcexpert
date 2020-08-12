@@ -4,8 +4,55 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d4c8d037aae6bd69e6a8c60f5fe378ab",
+    "content-hash": "7ffe21ae1c8f863b26aa91ba958cebda",
     "packages": [
+        {
+            "name": "alexantr/yii2-ace",
+            "version": "1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/alexantr/yii2-ace.git",
+                "reference": "7d6cbafa6ea6655499e2dc5d49a22df27bb92594"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/alexantr/yii2-ace/zipball/7d6cbafa6ea6655499e2dc5d49a22df27bb92594",
+                "reference": "7d6cbafa6ea6655499e2dc5d49a22df27bb92594",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "~2.0.5"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "alexantr\\ace\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alex Yashkin",
+                    "email": "alex@yashkin.by"
+                }
+            ],
+            "description": "Ace editor widget for Yii 2",
+            "keywords": [
+                "ace",
+                "code",
+                "editor",
+                "widget"
+            ],
+            "time": "2018-08-08T06:01:49+00:00"
+        },
         {
             "name": "almasaeed2010/adminlte",
             "version": "v2.4.18",
@@ -96,7 +143,7 @@
             "version": "3.5.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/jquery/jquery-dist.git",
+                "url": "git@github.com:jquery/jquery-dist.git",
                 "reference": "4c0e4becb8263bb5b3e6dadc448d8e7305ef8215"
             },
             "dist": {
@@ -114,7 +161,7 @@
             "version": "1.12.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/components/jqueryui.git",
+                "url": "git@github.com:components/jqueryui.git",
                 "reference": "44ecf3794cc56b65954cc19737234a3119d036cc"
             },
             "dist": {
@@ -755,6 +802,51 @@
                 "random"
             ],
             "time": "2018-07-02T15:55:56+00:00"
+        },
+        {
+            "name": "richardfan1126/yii2-sortable-gridview",
+            "version": "v0.0.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/richardfan1126/yii2-sortable-gridview.git",
+                "reference": "eea20e75cb1b8ca5596d3a8ebef3d8f4fff9dbb3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/richardfan1126/yii2-sortable-gridview/zipball/eea20e75cb1b8ca5596d3a8ebef3d8f4fff9dbb3",
+                "reference": "eea20e75cb1b8ca5596d3a8ebef3d8f4fff9dbb3",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "*",
+                "yiisoft/yii2-bootstrap": "~2.0.0",
+                "yiisoft/yii2-jui": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "richardfan\\sortable\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Richard Fan",
+                    "email": "richardfan1126@gmail.com",
+                    "homepage": "https://fancy-digital.com"
+                }
+            ],
+            "description": "Sortable GridView for Yii2",
+            "keywords": [
+                "extension",
+                "gridview",
+                "widget",
+                "yii2"
+            ],
+            "time": "2020-07-25T14:19:14+00:00"
         },
         {
             "name": "rmrevin/yii2-fontawesome",

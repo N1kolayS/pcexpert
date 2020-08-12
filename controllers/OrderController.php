@@ -32,8 +32,8 @@ class OrderController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index', 'update', 'create', 'delete',
-                            'ajax-get-equipment-kind', 'ajax-get-equipment-brand', 'ajax-get-equipment-sample', 'ajax-get-equipment-clients'],
+                        'actions' => ['index', 'update', 'create', 'delete', 'archive',
+                            'ajax-get-equipment-kind', 'ajax-get-equipment-brand', 'ajax-get-equipment-sample', 'ajax-get-clients'],
                         'allow' => true,
                         'roles' => [User::ROLE_REPAIRER],
                     ],
@@ -62,6 +62,21 @@ class OrderController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+
+    /**
+     * @return string
+     */
+    public function actionArchive()
+    {
+        $searchModel = new OrderSearch();
+        $dataProvider = $searchModel->searchArchive(Yii::$app->request->queryParams);
+
+        return $this->render('archive', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
 
     /**
      * Displays a single Order model.
@@ -205,7 +220,7 @@ class OrderController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
         }
 
         return $this->render('update', [

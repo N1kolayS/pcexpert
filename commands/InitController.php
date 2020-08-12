@@ -25,7 +25,7 @@ class InitController extends Controller
      */
     public function actionIndex()
     {
-        \Yii::$app->runAction('migrate', ['migrationPath' => '@yii/rbac/migrations/']);
+        Yii::$app->runAction('migrate', ['migrationPath' => '@yii/rbac/migrations/']);
 
         Yii::$app->authManager->removeAll();
 
@@ -112,6 +112,17 @@ class InitController extends Controller
     {
         $user = User::findByUsername($username);
         $user->setPassword($password);
+        $user->save();
+    }
+
+    /**
+     * @param $id
+     * @param $role
+     */
+    public function actionAssignRole($id, $role)
+    {
+        $user = User::findOne($id);
+        $user->role = $role;
         $user->save();
     }
 }

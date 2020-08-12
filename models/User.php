@@ -246,6 +246,13 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
 
+    /**
+     * @return array|ActiveRecord[]
+     */
+    public static function listActive()
+    {
+        return self::find()->where(['status' => self::STATUS_ACTIVE])->all();
+    }
 
     /**
      * @author Nikolay

@@ -11,15 +11,15 @@ use app\models\Order;
  */
 class OrderSearch extends Order
 {
-    public $client_fio;
+
     public $date_from;
     public $date_to;
     public $date_range;
-    public $clientFio;
-    public $clientPhone;
-    public $equipmentKind;
-    public $equipmentBrand;
-    public $equipmentSample;
+    public $client_fio;
+    public $client_phone;
+    public $equipment_kind;
+    public $equipment_brand;
+    public $equipment_sample;
 
     /**
      * {@inheritdoc}
@@ -31,9 +31,12 @@ class OrderSearch extends Order
             [['created_at', 'hired_at', 'closed_at', 'problems', 'kit', 'comment'], 'safe'],
             [['prepayment', 'cost'], 'number'],
             [['date_from', 'date_to'], 'date', 'format' => 'php:Y-m-d'],
-            [['date_range', 'clientFio', 'clientPhone', 'equipmentKind', 'equipmentBrand', 'equipmentSample'], 'string']
+            [['date_range', 'client_fio', 'client_phone', 'equipment_kind', 'equipment_brand', 'equipment_sample'], 'string'],
+            [[ 'equipment_kind', 'equipment_brand', 'equipment_sample'], 'trim']
         ];
     }
+
+
 
     /**
      * {@inheritdoc}
@@ -54,18 +57,45 @@ class OrderSearch extends Order
     public function search($params)
     {
         $query = Order::find();
-
-        // add conditions that should always apply here
-
+        $query->andWhere(['<', Order::tableName().'.status', Order::STATUS_CLOSE_PASSED]);
+        $query->joinWith(['equipment', 'client']);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => [
+                'defaultOrder' => [
+                    'created_at' => SORT_DESC,
+                ]
+            ],
         ]);
+
+        $dataProvider->sort->attributes['equipment_kind'] = [
+            'asc' => [Equipment::tableName().'.kind' => SORT_ASC],
+            'desc' => [Equipment::tableName().'.kind' => SORT_DESC],
+        ];
+
+        $dataProvider->sort->attributes['equipment_brand'] = [
+            'asc' => [Equipment::tableName().'.brand' => SORT_ASC],
+            'desc' => [Equipment::tableName().'.brand' => SORT_DESC],
+        ];
+
+        $dataProvider->sort->attributes['equipment_sample'] = [
+            'asc' => [Equipment::tableName().'.sample' => SORT_ASC],
+            'desc' => [Equipment::tableName().'.sample' => SORT_DESC],
+        ];
+
+        $dataProvider->sort->attributes['client_fio'] = [
+            'asc' => [Client::tableName().'.fio' => SORT_ASC],
+            'desc' => [Client::tableName().'.fio' => SORT_DESC],
+        ];
+
+        $dataProvider->sort->attributes['client_phone'] = [
+            'asc' => [Client::tableName().'.phone' => SORT_ASC],
+            'desc' => [Client::tableName().'.phone' => SORT_DESC],
+        ];
 
         $this->load($params);
 
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
             return $dataProvider;
         }
 
@@ -77,9 +107,9 @@ class OrderSearch extends Order
             'closed_at' => $this->closed_at,
             'equipment_id' => $this->equipment_id,
             'client_id' => $this->client_id,
-            'manager_id' => $this->manager_id,
-            'master_id' => $this->master_id,
-            'status' => $this->status,
+            Equipment::tableName().'.kind' => $this->equipment_kind,
+            Equipment::tableName().'.brand' => $this->equipment_brand,
+            Equipment::tableName().'.sample' => $this->equipment_sample,
             'placement' => $this->placement,
             'prepayment' => $this->prepayment,
             'cost' => $this->cost,
@@ -88,6 +118,85 @@ class OrderSearch extends Order
         $query->andFilterWhere(['like', 'problems', $this->problems])
             ->andFilterWhere(['like', 'kit', $this->kit])
             ->andFilterWhere(['like', 'comment', $this->comment])
+            ->andFilterWhere(['like', Client::tableName().'.fio', $this->client_fio])
+            ->andFilterWhere(['like', Client::tableName().'.phone', $this->client_phone])
+            ->andFilterWhere(['>=', 'created_at', $this->date_from])
+            ->andFilterWhere(['<=', 'created_at', $this->date_to ]);
+
+        return $dataProvider;
+    }
+
+
+    /**
+     * @param $params
+     * @return ActiveDataProvider
+     */
+    public function searchArchive($params)
+    {
+        $query = Order::find();
+        $query->andWhere(['>=', Order::tableName().'.status', Order::STATUS_CLOSE_PASSED]);
+        $query->joinWith(['equipment', 'client']);
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'sort' => [
+                'defaultOrder' => [
+                    'created_at' => SORT_DESC,
+                ]
+            ],
+        ]);
+
+        $dataProvider->sort->attributes['equipment_kind'] = [
+            'asc' => [Equipment::tableName().'.kind' => SORT_ASC],
+            'desc' => [Equipment::tableName().'.kind' => SORT_DESC],
+        ];
+
+        $dataProvider->sort->attributes['equipment_brand'] = [
+            'asc' => [Equipment::tableName().'.brand' => SORT_ASC],
+            'desc' => [Equipment::tableName().'.brand' => SORT_DESC],
+        ];
+
+        $dataProvider->sort->attributes['equipment_sample'] = [
+            'asc' => [Equipment::tableName().'.sample' => SORT_ASC],
+            'desc' => [Equipment::tableName().'.sample' => SORT_DESC],
+        ];
+
+        $dataProvider->sort->attributes['client_fio'] = [
+            'asc' => [Client::tableName().'.fio' => SORT_ASC],
+            'desc' => [Client::tableName().'.fio' => SORT_DESC],
+        ];
+
+        $dataProvider->sort->attributes['client_phone'] = [
+            'asc' => [Client::tableName().'.phone' => SORT_ASC],
+            'desc' => [Client::tableName().'.phone' => SORT_DESC],
+        ];
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'created_at' => $this->created_at,
+            'hired_at' => $this->hired_at,
+            'closed_at' => $this->closed_at,
+            'equipment_id' => $this->equipment_id,
+            'client_id' => $this->client_id,
+            Equipment::tableName().'.kind' => $this->equipment_kind,
+            Equipment::tableName().'.brand' => $this->equipment_brand,
+            Equipment::tableName().'.sample' => $this->equipment_sample,
+            'placement' => $this->placement,
+            'prepayment' => $this->prepayment,
+            'cost' => $this->cost,
+        ]);
+
+        $query->andFilterWhere(['like', 'problems', $this->problems])
+            ->andFilterWhere(['like', 'kit', $this->kit])
+            ->andFilterWhere(['like', 'comment', $this->comment])
+            ->andFilterWhere(['like', Client::tableName().'.fio', $this->client_fio])
+            ->andFilterWhere(['like', Client::tableName().'.phone', $this->client_phone])
             ->andFilterWhere(['>=', 'created_at', $this->date_from])
             ->andFilterWhere(['<=', 'created_at', $this->date_to ]);
 

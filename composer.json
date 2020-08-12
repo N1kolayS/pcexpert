@@ -21,7 +21,9 @@
         "dmstr/yii2-adminlte-asset": "^2.1",
         "kartik-v/yii2-widget-select2": "@dev",
         "yiisoft/yii2-jui": "^2.0",
-        "kartik-v/yii2-date-range": "dev-master"
+        "kartik-v/yii2-date-range": "dev-master",
+        "alexantr/yii2-ace": "^1.1",
+        "richardfan1126/yii2-sortable-gridview": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
