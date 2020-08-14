@@ -37,7 +37,7 @@ class CreateUser extends Model
             ['password', 'string', 'min' => 5],
 
             ['role', 'required'],
-            ['role', 'in', 'range' => [User::ROLE_ADMIN, User::ROLE_MANAGER, User::ROLE_OPERATOR, User::ROLE_MASTER, User::ROLE_DEFAULT]],
+            ['role', 'in', 'range' => [User::ROLE_ADMIN, User::ROLE_MANAGER, User::ROLE_OPERATOR, User::ROLE_REPAIRER, User::ROLE_DEFAULT]],
         ];
     }
 
