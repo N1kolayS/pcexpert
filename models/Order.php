@@ -5,6 +5,7 @@ namespace app\models;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Json;
 
 /**
  * This is the model class for table "{{%order}}".
@@ -24,6 +25,9 @@ use yii\helpers\ArrayHelper;
  * @property float|null $prepayment
  * @property float|null $cost
  * @property string|null $comment
+ * @property string|null $conclusion
+ * @property string|null $recommendation
+ * @property string|null $services -- json данные, услуги
  *
  * @property Client $client
  * @property Equipment $equipment
@@ -31,6 +35,8 @@ use yii\helpers\ArrayHelper;
  *
  * @property string $statusLabel
  * @property string $statusColor
+ *
+ * @property array $service
  *
  */
 class Order extends \yii\db\ActiveRecord
@@ -47,6 +53,7 @@ class Order extends \yii\db\ActiveRecord
     const STATUS_CLOSE_PASSED = 10;
     const STATUS_CLOSE_BOUGHT = 11;
 
+    private $_service_set = false;
 
     /**
      * {@inheritdoc}
@@ -54,6 +61,29 @@ class Order extends \yii\db\ActiveRecord
     public static function tableName()
     {
         return '{{%order}}';
+    }
+
+    /**
+     * @param array $value
+     */
+    public function setService(array $value)
+    {
+        $data = [];
+        foreach ($value as $item)
+        {
+            $service = Service::findOne($item);
+            $data[] = ['id' => $item, 'name' => $service->name, 'price' => $service->price];
+        }
+        $this->services = Json::encode($data);
+        $this->_service_set = true;
+    }
+
+    /**
+     * @return array|mixed|null
+     */
+    public function getService()
+    {
+        return ($this->services) ? Json::decode($this->services) : [];
     }
 
     /**
@@ -78,12 +108,12 @@ class Order extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['created_at', 'hired_at', 'closed_at'], 'safe'],
+            [['created_at', 'hired_at', 'closed_at', 'service'], 'safe'],
             [['equipment_id', 'client_id'], 'required'],
             [['equipment_id', 'client_id', 'manager_id', 'master_id', 'status', 'placement'], 'integer'],
             [['problems', 'comment'], 'string'],
             [['prepayment', 'cost'], 'number'],
-            [['kit'], 'string', 'max' => 255],
+            [['kit', 'conclusion', 'recommendation'], 'string', 'max' => 255],
             [['client_id'], 'exist', 'skipOnError' => true, 'targetClass' => Client::className(), 'targetAttribute' => ['client_id' => 'id']],
             [['equipment_id'], 'exist', 'skipOnError' => true, 'targetClass' => Equipment::className(), 'targetAttribute' => ['equipment_id' => 'id']],
             [['manager_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['manager_id' => 'id']],
@@ -111,6 +141,8 @@ class Order extends \yii\db\ActiveRecord
             'prepayment' => 'Prepayment',
             'cost' => 'Cost',
             'comment' => 'Примечания',
+            'conclusion' => 'Заключение',
+            'recommendation' => 'Рекомендация',
 
             'equipment_kind' => 'Вид техники',
             'equipment_brand' => 'Производитель',
@@ -230,6 +262,10 @@ class Order extends \yii\db\ActiveRecord
         if ($this->isNewRecord) {
             $this->status = self::STATUS_START;
             $this->manager_id = Yii::$app->user->id;
+        }
+        if (!$this->_service_set) // Немного колхоза, обнулить услуги, если не было установки
+        {
+            $this->services = null;
         }
         return parent::beforeSave($insert);
     }

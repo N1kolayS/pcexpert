@@ -15,11 +15,16 @@ $this->title = 'Даныне о заявке №' . $model->id. ' от '. $model
 $this->params['breadcrumbs'][] = ['label' => 'Заявки', 'url' => ['index']];
 $this->params['breadcrumbs'][] = 'Заявка';
 
+$prepayment = $model->prepayment ?: 0;
+$cost  = $model->cost ?: 0;
+
 $js = <<< JS
-let cost = 0;
 let modal_services = $("#modal_services");
 let current_service = $("#current_service");
 let totalCost = $("#totalCost");
+let prepayment = $prepayment;
+
+let order_cost = $("#order-cost");
 
 $("#add_service").click(function() {
   modal_services.modal('show');
@@ -28,7 +33,7 @@ $("#add_service").click(function() {
 $(".service-add").click(function () {
     
     current_service.append('<tr>' +
-     '<td><input type="hidden" name="Order[services][]" value="'+ $(this).data('id') +'" /> '+ $(this).data('name') +'</td>' +
+     '<td><input type="hidden" name="Order[service][]" value="'+ $(this).data('id') +'" /> '+ $(this).data('name') +'</td>' +
      '<td>'+ $(this).data('guarantee') +'</td>' +
      '<td></td>' +
      '<td class="current_price" data-price="'+ $(this).data('price') +'">'+ $(this).data('price') +'</td>' +
@@ -44,19 +49,21 @@ current_service.on('click', '.delete-item', function (){
 
 function countCost()
 {
-   
+   let cost =0;
     $(".current_price").each(function (index, value) {
         let price = $(value).data('price');
         cost += +price;
         console.log(price);
     });
+    let total = cost - prepayment;
     totalCost.html(cost);
+    order_cost.val(total);
 }
 JS;
 
 $this->registerJs($js);
 ?>
-<?php $form = ActiveForm::begin(); ?>
+<?php $form = ActiveForm::begin(['id' => 'form_order']); ?>
 <div class="row">
     <div class="col-md-4">
         <div class="box box-info">
@@ -95,7 +102,7 @@ $this->registerJs($js);
                     ->dropDownList($model::listPlacement())->label(false) ?>
 
                 <?= $form->field($model, 'comment')
-                    ->textarea(['maxlength' => true, 'placeholder' => $model->attributeLabels()['comment'] ])->label(false) ?>
+                    ->textarea(['maxlength' => true, 'placeholder' => $model->getAttributeLabel('comment') ])->label(false) ?>
 
             </div>
         </div>
@@ -119,16 +126,23 @@ $this->registerJs($js);
                     </tr>
                     </thead>
                     <tbody id="current_service">
-
+                    <?php foreach ($model->service as $service): ?>
+                    <tr>
+                        <td><input type="hidden" name="Order[service][]" value="<?=$service['id']?>" /> <?=$service['name']?></td>
+                        <td><?=$service['name']?></td>
+                        <td></td>
+                        <td class="current_price" data-price="<?=$service['price']?>"><?=$service['price']?></td>
+                        <td><a role="button" class="delete-item"><span class="glyphicon glyphicon-remove"></span></a></td>
+                    </tr>
+                    <?php endforeach; ?>
                     </tbody>
-
                     <tfoot>
                     <tr>
 
                         <td></td>
                         <td>Итоговая сумма</td>
                         <td></td>
-                        <td><span id="totalCost">0</span> </td>
+                        <td><span id="totalCost"><?=array_sum(ArrayHelper::getColumn($model->service, 'price'))?></span> </td>
                         <td></td>
                     </tr>
                     <tr>
@@ -163,6 +177,12 @@ $this->registerJs($js);
             <div class="box-body">
                 <?= $form->field($model, 'master_id')
                     ->dropDownList(ArrayHelper::map(\app\models\User::listActive(), 'id', 'username'))->label() ?>
+
+                <?= $form->field($model, 'conclusion')
+                    ->textarea(['maxlength' => true, 'placeholder' => $model->getAttributeLabel('conclusion') ])->label(false) ?>
+
+                <?= $form->field($model, 'recommendation')
+                    ->textarea(['maxlength' => true, 'placeholder' => $model->getAttributeLabel('recommendation') ])->label(false) ?>
             </div>
         </div>
 
@@ -170,7 +190,11 @@ $this->registerJs($js);
 </div>
 <div class="row">
     <div class="col-md-4">
+        <?=Html::hiddenInput('print_act', 0, ['id' => 'print_act'])?>
         <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
+
+        <?= Html::button('Сохранить и напечатать чек',
+            ['class' => 'btn btn-primary pull-right', 'onclick' => "$('#print_act').val(1);document.forms['form_order'].submit();"]) ?>
     </div>
 </div>
 <?php ActiveForm::end(); ?>

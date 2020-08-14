@@ -49,6 +49,19 @@ class PrintController extends Controller
         ]);
     }
 
+    /**
+     * @param $id
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionClose($id)
+    {
+        $model = $this->findModelOrder($id);
+        $template = Template::findClose();
+        return $this->render($template->renderPath, [
+            'model' => $model
+        ]);
+    }
 
     /**
      * Finds the Order model based on its primary key value.

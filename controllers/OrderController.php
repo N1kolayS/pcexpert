@@ -60,6 +60,7 @@ class OrderController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'print_close_id' => Yii::$app->request->get('print_close_id')
         ]);
     }
 
@@ -220,7 +221,9 @@ class OrderController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+            return $this->redirect(['index',
+                'print_close_id' => Yii::$app->request->post('print_act') ? $model->id : ''
+            ]);
         }
 
         return $this->render('update', [

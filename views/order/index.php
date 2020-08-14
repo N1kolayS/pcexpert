@@ -10,9 +10,13 @@ use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\OrderSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $print_close_id string */
+
 
 $this->title = 'Актуальные заявки';
 $this->params['breadcrumbs'][] = $this->title;
+
+$route_PrintAct = Url::to(['print/close', 'id' => $print_close_id]);
 
 $css = <<<CSS
 #date_range
@@ -23,7 +27,10 @@ $css = <<<CSS
 
 CSS;
 $this->registerCss($css);
-
+if ($print_close_id)
+{
+    $this->registerJs("window.open('$route_PrintAct', 'Печать Акта', 'height=600, width=800,toolbar=0,location=0,menubar=0');");
+}
 ?>
 <div class="box box-primary">
     <div class="box-header with-border">
