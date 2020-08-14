@@ -60,7 +60,8 @@ class OrderController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'print_close_id' => Yii::$app->request->get('print_close_id')
+            'print_close_id' => Yii::$app->request->get('print_close_id'),
+            'print_order_id' => Yii::$app->request->get('print_order_id')
         ]);
     }
 
@@ -101,8 +102,8 @@ class OrderController extends Controller
     {
         $model = new CreateOrder();
 
-        if ($model->load(Yii::$app->request->post()) && $model->add()) {
-            return $this->redirect(['index']);
+        if ($model->load(Yii::$app->request->post()) && (($order = $model->add())!=null)) {
+            return $this->redirect(['index', 'print_order_id' => $order->id]);
         }
 
         return $this->render('create', [

@@ -52,7 +52,7 @@ class Equipment extends \yii\db\ActiveRecord
     {
         return [
             [['created_at'], 'safe'],
-            [['client_id', 'kind', 'brand', 'sample', 'serial_number'], 'required'],
+            [['client_id', 'kind', 'brand', 'sample'], 'required'],
             [['client_id'], 'integer'],
             [['description'], 'string'],
             [['kind', 'brand', 'sample', 'serial_number'], 'string', 'max' => 255],

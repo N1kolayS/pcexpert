@@ -97,5 +97,14 @@ class SiteController extends Controller
         return $this->goHome();
     }
 
+    /**
+     * Установить куку для состояния левого меню, сложенное или развернутое
+     * @param $status
+     */
+    public function actionStatusCollapse($status)
+    {
+        $session = Yii::$app->session;
+        $session->set('menu_collapse', $status);
+    }
 
 }

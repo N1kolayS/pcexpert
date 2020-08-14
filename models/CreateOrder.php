@@ -46,7 +46,7 @@ class CreateOrder extends Model
             ['client_phone', 'is10NumbersOnly'],
 
             [['equipment_kind', 'equipment_brand', 'equipment_sample', 'equipment_serial_number' ], 'string', 'min' => 1, 'max' => 255],
-            [['equipment_kind', 'equipment_brand', 'equipment_sample', 'equipment_serial_number', 'problems' ], 'required'],
+            [['equipment_kind', 'equipment_brand', 'equipment_sample',  'problems' ], 'required'],
 
             [['client_id', 'equipment_id', 'placement'], 'integer'],
 

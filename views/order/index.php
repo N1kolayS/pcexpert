@@ -11,12 +11,10 @@ use yii\helpers\Url;
 /* @var $searchModel app\models\OrderSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 /* @var $print_close_id string */
-
+/* @var $print_order_id string */
 
 $this->title = 'Актуальные заявки';
 $this->params['breadcrumbs'][] = $this->title;
-
-$route_PrintAct = Url::to(['print/close', 'id' => $print_close_id]);
 
 $css = <<<CSS
 #date_range
@@ -29,7 +27,13 @@ CSS;
 $this->registerCss($css);
 if ($print_close_id)
 {
-    $this->registerJs("window.open('$route_PrintAct', 'Печать Акта', 'height=600, width=800,toolbar=0,location=0,menubar=0');");
+    $route_PrintClose = Url::to(['print/close', 'id' => $print_close_id]);
+    $this->registerJs("window.open('$route_PrintClose', 'Печать Акта', 'height=600, width=800,toolbar=0,location=0,menubar=0');");
+}
+if ($print_order_id)
+{
+    $route_PrintOrder = Url::to(['print/order', 'id' => $print_order_id]);
+    $this->registerJs("window.open('$route_PrintOrder', 'Печать Акта', 'height=600, width=800,toolbar=0,location=0,menubar=0');");
 }
 ?>
 <div class="box box-primary">
@@ -70,8 +74,12 @@ if ($print_close_id)
                     ]
                 ]),
                 'attribute' => 'created_at',
-                'format' =>  ['date', 'php:d M Y H:i'],
-                'options' => ['width' => '185']
+                //'format' =>  ['date', 'php:d M Y H:i'],
+                'options' => ['width' => '185'],
+                'content' => function ($model) {
+                    return Html::a(Yii::$app->formatter->asDatetime($model->created_at, "dd MMMM yyyy HH:mm" ), ['update' ,'id' => $model->id]);
+                }
+
             ],
             [
                 'attribute' => 'equipment_kind',
@@ -130,7 +138,7 @@ if ($print_close_id)
             'comment',
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{update} {print}',
+                'template' => ' {print}',
                 'buttons' => [
                         'print' => function($url,$model,$key){
                             return Html::a('<span class="glyphicon glyphicon-print"></span>',

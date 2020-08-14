@@ -5,11 +5,29 @@
 
 use app\widgets\Alert;
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 
 AppAsset::register($this);
+
+$route_statusCollapse = Url::to(['site/status-collapse']);
+$js = <<<JS
+ $('.sidebar-toggle').click(function() {
+                if($('body').delay(300).hasClass('sidebar-collapse')) {
+                    jQuery.get('$route_statusCollapse',{status: 'open'})
+                    $.cookie("sidebar","open");
+
+                }
+                else {
+                    jQuery.get('$route_statusCollapse',{status: 'close'})
+                    $.cookie("sidebar","close");
+                }
+            });
+JS;
+
+$this->registerJs($js);
 ?>
 <?php $this->beginPage() ?>
     <!DOCTYPE html>
@@ -21,8 +39,9 @@ AppAsset::register($this);
         <?php $this->registerCsrfMetaTags() ?>
         <title><?= Html::encode($this->title) ?></title>
         <?php $this->head() ?>
+
     </head>
-    <body class="skin-green-light sidebar-mini hold-transition ">
+    <body class="skin-green-light sidebar-mini hold-transition <?=(Yii::$app->session->get('menu_collapse')=='close') ? 'sidebar-collapse' : '' ?> ">
     <?php $this->beginBody() ?>
 
     <div class="wrapper">

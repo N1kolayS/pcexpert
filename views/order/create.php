@@ -53,13 +53,37 @@ btn_reset_client.click(function () {
     client_phone.attr("readonly", false);
     client_comment.attr("readonly", false);
 });
+    
+$('#create_order').keydown(function(event) {
+   
+  if (event.ctrlKey && event.keyCode === 13) {
+    $(this).trigger('submit');
+  }
+  
+  if(event.keyCode === 13) {
+          event.preventDefault();
+          return false;
+  }
+})
+
+$('input, select, textarea').on('keydown', function(e) {
+    submitCreateForm();
+});
+
+function submitCreateForm()
+{
+   if (event.ctrlKey && event.keyCode === 13) {
+    $('#create_order').submit();
+  } 
+}
+
 JS;
 
 $this->registerJs($js);
 
 
 ?>
-<?php $form = ActiveForm::begin(); ?>
+<?php $form = ActiveForm::begin(['id' => 'create_order']); ?>
 <div class="row">
     <div class="col-md-6">
         <div class="box box-info">
@@ -82,6 +106,7 @@ $this->registerJs($js);
                         ],
 
                         'options' => [
+                                'tabindex' => 1,
                             'autofocus'=>'autofocus',
                             'class' => 'form-control',
                             'placeholder' => $model->getAttributeLabel('client_fio'),
@@ -94,11 +119,12 @@ $this->registerJs($js);
                 ])->widget(MaskedInput::className(), [
                         'name' => 'client_phone',
                         'mask' => '999-999-9999',
-                        'options' => ['placeholder' => $model->getAttributeLabel('client_phone')]
+
+                        'options' => ['placeholder' => $model->getAttributeLabel('client_phone'), 'tabindex' => 2]
                     ])->label(false) ?>
 
                 <?= $form->field($model, 'client_comment')
-                    ->textarea(['maxlength' => true, 'placeholder' => $model->getAttributeLabel('client_comment') ])->label(false) ?>
+                    ->textarea(['maxlength' => true, 'placeholder' => $model->getAttributeLabel('client_comment'),  ['tabindex' => 3] ])->label(false) ?>
 
                 <?=$form->field($model,'client_id')->hiddenInput()->label(false)?>
             </div>
@@ -124,6 +150,7 @@ $this->registerJs($js);
                         ],
                         'options' => [
                             'class' => 'form-control',
+                            'tabindex' => 4,
                             'placeholder' => $model->getAttributeLabel('equipment_kind'),
 
                         ]
@@ -143,6 +170,7 @@ $this->registerJs($js);
                         ],
                         'options' => [
                             'class' => 'form-control',
+                            'tabindex' => 5,
                             'placeholder' => $model->getAttributeLabel('equipment_brand'),
 
                         ]
@@ -162,20 +190,22 @@ $this->registerJs($js);
                         ],
                         'options' => [
                             'class' => 'form-control',
+                            'tabindex' => 6,
                             'placeholder' => $model->getAttributeLabel('equipment_sample'),
 
                         ]
                     ])->label(false) ?>
 
                 <?= $form->field($model, 'equipment_serial_number')
-                    ->textInput(['maxlength' => true, 'placeholder' => $model->getAttributeLabel('equipment_serial_number')])->label(false) ?>
+                    ->textInput(['maxlength' => true, 'placeholder' => $model->getAttributeLabel('equipment_serial_number'),  ['tabindex' => 7]])->label(false) ?>
 
                 <?= $form->field($model, 'kit')
                     ->widget(Select2::classname(), [
                         'data' => ArrayHelper::map(Library::listKits(), 'name','name'),
                         'options' => [
                                 'placeholder' => $model->getAttributeLabel('kit'),
-                            'multiple'=>true
+                            'multiple'=>true,
+                            'tabindex' => 8
                         ],
                         'pluginOptions' => [
                             'allowClear' => true,
@@ -216,12 +246,24 @@ $this->registerJs($js);
                         'data' => ArrayHelper::map(Library::listProblems(), 'name','name'),
                         'options' => [
                             'placeholder' => $model->getAttributeLabel('problems'),
-                            'multiple'=>true
+                            'multiple'=>true,
+                            'tabindex' => 9
                         ],
                         'pluginOptions' => [
                             'allowClear' => true,
                             'tags' => true,
                             'tokenSeparators' => [',', '.'],
+                        ],
+                        'pluginEvents' => [
+                            "change" => "function() { submitCreateForm(); }",
+
+                            "select2:open" => "function() { submitCreateForm(); }",
+
+                            "select2:close" => "function() { submitCreateForm(); }",
+
+                            "select2:select" => "function() { submitCreateForm(); }",
+
+                            "select2:unselect" => "function() { submitCreateForm(); }"
                         ],
                     ])->label(false)
                      ?>
