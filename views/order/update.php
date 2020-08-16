@@ -11,7 +11,7 @@ use \app\models\Service;
 /* @var $this yii\web\View */
 /* @var $model app\models\Order */
 
-$this->title = 'Даныне о заявке №' . $model->id. ' от '. $model->created_at;
+$this->title = 'Данные о заявке №' . $model->id. ' от '. $model->created_at;
 $this->params['breadcrumbs'][] = ['label' => 'Заявки', 'url' => ['index']];
 $this->params['breadcrumbs'][] = 'Заявка';
 
@@ -118,7 +118,7 @@ $this->registerJs($js);
                     <thead>
                     <tr>
 
-                        <th>Работа, копмлектующие</th>
+                        <th>Работа, комплектующие</th>
                         <th>Гарантия</th>
                         <th>Кол-во</th>
                         <th>Цена</th>

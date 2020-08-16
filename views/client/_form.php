@@ -20,13 +20,9 @@ use yii\bootstrap\ActiveForm;
 
     ]) ?>
 
-    <?= $form->field($model, 'status')->textInput() ?>
-
-    <?= $form->field($model, 'rating')->textInput() ?>
 
     <?= $form->field($model, 'comment')->textarea(['rows' => 6]) ?>
 
-    <?= $form->field($model, 'legal')->textInput() ?>
 </div>
 <div class="box-footer">
     <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>

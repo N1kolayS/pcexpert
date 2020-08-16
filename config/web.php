@@ -13,8 +13,13 @@ $config = [
     ],
     'language' => 'ru-RU',
     'sourceLanguage' => 'ru-Ru',
+    'timeZone' => 'Asia/Yekaterinburg',
     'components' => [
-
+        'formatter' => [
+            'defaultTimeZone'=>'Asia/Yekaterinburg',
+            'class' => 'yii\i18n\Formatter',
+            'dateFormat' => 'd MMMM yyyy',
+        ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => '4OUTJ4EdCwRa60KuT4JyckttSRqaImog',
