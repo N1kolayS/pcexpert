@@ -83,7 +83,7 @@ $this->registerJs($js);
             <div class="box-body">
 
                 <?= $form->field($model, 'kit')->textInput(['maxlength' => true])->label(false) ?>
-                <p>Серийный номер <?=$model->equipment->serial_number?> </p>
+                <p>Серийный номер <strong><?=$model->equipment->serial_number?></strong>  </p>
 
                 <?= $form->field($model, 'problems')->textInput(['maxlength' => true])->label(false)
                 ?>
@@ -174,7 +174,13 @@ $this->registerJs($js);
             </div>
         </div>
         <div class="box box-primary">
+            <div class="box-header">
+                <h3 class="box-title">Оформил <?=$model->manager->username?></h3>
+            </div>
             <div class="box-body">
+                <strong><?=$model->problems?></strong>
+                <hr />
+
                 <?= $form->field($model, 'master_id')
                     ->dropDownList(ArrayHelper::map(\app\models\User::listActive(), 'id', 'username'))->label() ?>
 
