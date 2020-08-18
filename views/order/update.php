@@ -129,7 +129,7 @@ $this->registerJs($js);
                     <?php foreach ($model->service as $service): ?>
                     <tr>
                         <td><input type="hidden" name="Order[service][]" value="<?=$service['id']?>" /> <?=$service['name']?></td>
-                        <td><?=$service['name']?></td>
+                        <td><?=$service['guarantee']?></td>
                         <td></td>
                         <td class="current_price" data-price="<?=$service['price']?>"><?=$service['price']?></td>
                         <td><a role="button" class="delete-item"><span class="glyphicon glyphicon-remove"></span></a></td>

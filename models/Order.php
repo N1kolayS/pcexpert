@@ -68,13 +68,8 @@ class Order extends \yii\db\ActiveRecord
      */
     public function setService(array $value)
     {
-        $data = [];
-        foreach ($value as $item)
-        {
-            $service = Service::findOne($item);
-            $data[] = ['id' => $item, 'name' => $service->name, 'price' => $service->price];
-        }
-        $this->services = Json::encode($data);
+        $services = Service::find()->where(['id' => $value])->all();
+        $this->services = Json::encode($services);
         $this->_service_set = true;
     }
 
