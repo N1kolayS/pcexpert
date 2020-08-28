@@ -10,8 +10,7 @@ use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\OrderSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-/* @var $print_close_id string */
-/* @var $print_order_id string */
+
 
 $this->title = 'Актуальные заявки';
 $this->params['breadcrumbs'][] = $this->title;
@@ -25,16 +24,18 @@ $css = <<<CSS
 
 CSS;
 $this->registerCss($css);
-if ($print_close_id)
+if (Yii::$app->session->hasFlash('print_order_id'))
 {
-    $route_PrintClose = Url::to(['print/close', 'id' => $print_close_id]);
-    $this->registerJs("window.open('$route_PrintClose', 'Печать Акта', 'height=600, width=800,toolbar=0,location=0,menubar=0');");
-}
-if ($print_order_id)
-{
-    $route_PrintOrder = Url::to(['print/order', 'id' => $print_order_id]);
+    $route_PrintOrder = Url::to(['print/order', 'id' => Yii::$app->session->getFlash('print_order_id')]);
     $this->registerJs("window.open('$route_PrintOrder', 'Печать Акта', 'height=600, width=800,toolbar=0,location=0,menubar=0');");
 }
+
+if (Yii::$app->session->hasFlash('print_act'))
+{
+    $route_PrintClose = Url::to(['print/close', 'id' => Yii::$app->session->getFlash('print_act')]);
+    $this->registerJs("window.open('$route_PrintClose', 'Печать Акта', 'height=600, width=800,toolbar=0,location=0,menubar=0');");
+}
+
 ?>
 <div class="box box-primary">
     <div class="box-header with-border">
