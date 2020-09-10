@@ -32,11 +32,22 @@ class OrderController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index', 'update', 'create', 'delete', 'archive',
+                        'actions' => ['delete'],
+                        'allow' => true,
+                        'roles' => [User::ROLE_MANAGER],
+                    ],
+                    [
+                        'actions' => ['create'],
+                        'allow' => true,
+                        'roles' => [User::ROLE_OPERATOR],
+                    ],
+                    [
+                        'actions' => ['index', 'update',  'archive',
                             'ajax-get-equipment-kind', 'ajax-get-equipment-brand', 'ajax-get-equipment-sample', 'ajax-get-clients'],
                         'allow' => true,
                         'roles' => [User::ROLE_REPAIRER],
                     ],
+
                 ],
             ],
             'verbs' => [
@@ -78,19 +89,6 @@ class OrderController extends Controller
         ]);
     }
 
-
-    /**
-     * Displays a single Order model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
 
     /**
      * Creates a new Order model.
@@ -222,7 +220,9 @@ class OrderController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->session->setFlash('print_act', $model->id);
+            if (Yii::$app->request->post('print_act')) {
+                Yii::$app->session->setFlash('print_act', $model->id);
+            }
             return $this->redirect(['index' ]);
         }
 

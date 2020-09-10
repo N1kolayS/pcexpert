@@ -27,7 +27,8 @@ class Kind extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name'], 'string', 'max' => 255],
+            [['name'], 'required'],
+            [['name'], 'string', 'min' =>2, 'max' => 255],
         ];
     }
 

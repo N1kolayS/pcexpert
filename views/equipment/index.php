@@ -19,7 +19,13 @@ $this->params['breadcrumbs'][] = $this->title;
             'columns' => [
                 'id',
                 'created_at',
-                'client_id',
+                [
+                    'attribute' => 'client_id',
+                    'content' => function (\app\models\Equipment $model) {
+                        return Html::a($model->client->fio, ['client/update', 'id' => $model->client_id]);
+                    }
+                ],
+
                 'kind',
                 'brand',
                 'sample',
