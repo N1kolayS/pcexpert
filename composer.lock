@@ -704,12 +704,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-widget-select2.git",
-                "reference": "78efbcd1ae87b87803f9beb5e692acf790106cfb"
+                "reference": "1f095abdc7e319792871eec24c11e9d6eba097c3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-widget-select2/zipball/78efbcd1ae87b87803f9beb5e692acf790106cfb",
-                "reference": "78efbcd1ae87b87803f9beb5e692acf790106cfb",
+                "url": "https://api.github.com/repos/kartik-v/yii2-widget-select2/zipball/1f095abdc7e319792871eec24c11e9d6eba097c3",
+                "reference": "1f095abdc7e319792871eec24c11e9d6eba097c3",
                 "shasum": ""
             },
             "require": {
@@ -756,7 +756,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2020-07-22T10:40:59+00:00"
+            "time": "2020-09-07T08:03:37+00:00"
         },
         {
             "name": "paragonie/random_compat",
@@ -1472,16 +1472,16 @@
         },
         {
             "name": "yiisoft/yii2",
-            "version": "2.0.36",
+            "version": "2.0.38",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-framework.git",
-                "reference": "a557111ea6c27794b98c98b76ff3f127eb55f309"
+                "reference": "fd01e747cc66a049ec105048f0ab8dfbdf60bf4b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/a557111ea6c27794b98c98b76ff3f127eb55f309",
-                "reference": "a557111ea6c27794b98c98b76ff3f127eb55f309",
+                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/fd01e747cc66a049ec105048f0ab8dfbdf60bf4b",
+                "reference": "fd01e747cc66a049ec105048f0ab8dfbdf60bf4b",
                 "shasum": ""
             },
             "require": {
@@ -1582,7 +1582,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-07-07T21:45:32+00:00"
+            "time": "2020-09-14T21:52:10+00:00"
         },
         {
             "name": "yiisoft/yii2-bootstrap",
@@ -3259,6 +3259,7 @@
             "keywords": [
                 "tokenizer"
             ],
+            "abandoned": true,
             "time": "2017-11-27T05:48:46+00:00"
         },
         {
