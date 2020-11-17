@@ -50,7 +50,7 @@ class CreateOrder extends Model
 
             [['client_id', 'equipment_id', 'placement'], 'integer'],
 
-            [['comment', 'prepayment'], 'string'],
+            [['comment', 'prepayment', 'client_comment'], 'string'],
             [['kit', 'problems'], 'safe'],
 
         ];

@@ -69,9 +69,11 @@ $this->registerJs($js);
         <div class="box box-info">
             <div class="box-header">
                 <h3 class="box-title"><?=$model->client->fio?></h3>
+
             <?=Html::a('<span class="glyphicon glyphicon-cog">', ['client/update', 'id' => $model->client_id], ['class' => 'pull-right btn btn-default'])?>
             </div>
             <div class="box-body">
+                <p><?=$model->client->comment?></p>
                 <p> <span class=" glyphicon glyphicon-earphone "></span> <?=$model->client->phoneFormat?> </p>
             </div>
         </div>

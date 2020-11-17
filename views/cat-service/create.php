@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\CatService */
 
-$this->title = 'Создать Катеогию услуг';
+$this->title = 'Создать Категорию услуг';
 $this->params['breadcrumbs'][] = ['label' => 'Категория услуг', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

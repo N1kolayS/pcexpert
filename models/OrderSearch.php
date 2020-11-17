@@ -102,7 +102,6 @@ class OrderSearch extends Order
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'created_at' => $this->created_at,
             'hired_at' => $this->hired_at,
             'closed_at' => $this->closed_at,
             'equipment_id' => $this->equipment_id,
@@ -120,8 +119,8 @@ class OrderSearch extends Order
             ->andFilterWhere(['like', 'comment', $this->comment])
             ->andFilterWhere(['like', Client::tableName().'.fio', $this->client_fio])
             ->andFilterWhere(['like', Client::tableName().'.phone', $this->client_phone])
-            ->andFilterWhere(['>=', 'created_at', $this->date_from])
-            ->andFilterWhere(['<=', 'created_at', $this->date_to ]);
+            ->andFilterWhere(['>=', Order::tableName().'.created_at', $this->date_from])
+            ->andFilterWhere(['<=', Order::tableName().'.created_at', $this->date_to ]);
 
         return $dataProvider;
     }
@@ -179,7 +178,6 @@ class OrderSearch extends Order
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'created_at' => $this->created_at,
             'hired_at' => $this->hired_at,
             'closed_at' => $this->closed_at,
             'equipment_id' => $this->equipment_id,
@@ -197,8 +195,8 @@ class OrderSearch extends Order
             ->andFilterWhere(['like', 'comment', $this->comment])
             ->andFilterWhere(['like', Client::tableName().'.fio', $this->client_fio])
             ->andFilterWhere(['like', Client::tableName().'.phone', $this->client_phone])
-            ->andFilterWhere(['>=', 'created_at', $this->date_from])
-            ->andFilterWhere(['<=', 'created_at', $this->date_to ]);
+            ->andFilterWhere(['>=', Order::tableName().'.created_at', $this->date_from])
+            ->andFilterWhere(['<=', Order::tableName().'.created_at', $this->date_to ]);
 
         return $dataProvider;
     }

@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\EquipmentSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Оборуование';
+$this->title = 'Оборудование';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box box-primary">
