@@ -103,7 +103,7 @@ class OrderController extends Controller
             Yii::$app->session->setFlash('print_order_id', $order->id);
             return $this->redirect(['index']);
         }
-
+        $model->equipment_serial_number = uniqid('srv');
         return $this->render('create', [
             'model' => $model,
         ]);

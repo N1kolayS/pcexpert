@@ -6,6 +6,10 @@ use kartik\daterange\DateRangePicker;
 use kartik\select2\Select2;
 use yii\web\JsExpression;
 use yii\helpers\Url;
+use app\models\Order;
+use kartik\export\ExportMenu;
+
+
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\OrderSearch */
@@ -36,17 +40,76 @@ if (Yii::$app->session->hasFlash('print_act'))
     $this->registerJs("window.open('$route_PrintClose', 'Печать Акта', 'height=600, width=800,toolbar=0,location=0,menubar=0');");
 }
 
+$gridColumns = [
+    'id',
+    [
+
+        'attribute' => 'created_at',
+        'content' => function (Order $model) {
+            return Yii::$app->formatter->asDatetime($model->created_at, "dd MMMM yyyy HH:mm" );
+        }
+
+    ],
+    [
+        'attribute' => 'equipment_kind',
+        'content' => function (Order $model) {
+            return $model->equipment->kind;
+        }
+    ],
+    [
+        'attribute' => 'equipment_brand',
+        'content' => function (Order $model) {
+            return $model->equipment->brand;
+        }
+    ],
+    [
+        'attribute' => 'equipment_sample',
+        'content' => function ($model) {
+            return $model->equipment->sample;
+        }
+    ],
+    [
+        'attribute' => 'equipment_serial_number',
+        'content' => function (Order $model) {
+            return $model->equipment->serial_number;
+        }
+    ],
+    [
+        'attribute' => 'client_fio',
+        'content' => function (Order $model) {
+            return $model->client->fio;
+        }
+    ],
+    [
+        'attribute' => 'client_phone',
+        'content' => function (Order $model) {
+            return $model->client->phoneFormat;
+        }
+    ],
+    'comment',
+
+];
+
+
 ?>
 <div class="box box-primary">
     <div class="box-header with-border">
         <?= Html::a('Создать заявку', ['create'], ['class' => 'btn btn-success']) ?>
     </div>
     <div class="box-body">
+        <?php
+
+        // Renders a export dropdown menu
+        echo ExportMenu::widget([
+            'dataProvider' => $dataProvider,
+            'columns' => $gridColumns
+        ]);
+        ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
-        'rowOptions'=>function (\app\models\Order  $model, $key, $index, $grid) {
+        'rowOptions'=>function (Order  $model, $key, $index, $grid) {
             return [
                 'class'=> $model->statusColor
             ];
@@ -77,20 +140,20 @@ if (Yii::$app->session->hasFlash('print_act'))
                 'attribute' => 'created_at',
                 //'format' =>  ['date', 'php:d M Y H:i'],
                 'options' => ['width' => '185'],
-                'content' => function ($model) {
+                'content' => function (Order $model) {
                     return Html::a(Yii::$app->formatter->asDatetime($model->created_at, "dd MMMM yyyy HH:mm" ), ['update' ,'id' => $model->id]);
                 }
 
             ],
             [
                 'attribute' => 'equipment_kind',
-                'content' => function ($model) {
+                'content' => function (Order $model) {
                     return $model->equipment->kind;
                 }
             ],
             [
                 'attribute' => 'equipment_brand',
-                'content' => function ($model) {
+                'content' => function (Order $model) {
                     return $model->equipment->brand;
                 }
             ],
@@ -98,6 +161,12 @@ if (Yii::$app->session->hasFlash('print_act'))
                 'attribute' => 'equipment_sample',
                 'content' => function ($model) {
                     return $model->equipment->sample;
+                }
+            ],
+            [
+                'attribute' => 'equipment_serial_number',
+                'content' => function (Order $model) {
+                    return $model->equipment->serial_number;
                 }
             ],
             [
@@ -141,9 +210,9 @@ if (Yii::$app->session->hasFlash('print_act'))
                 'class' => 'yii\grid\ActionColumn',
                 'template' => ' {print}',
                 'buttons' => [
-                        'print' => function($url,$model,$key){
-                            return Html::a('<span class="glyphicon glyphicon-print"></span>',
-                                ['print/order', 'id' => $model->id],
+                    'print' => function($url,$model,$key){
+                        return Html::a('<span class="glyphicon glyphicon-print"></span>',
+                            ['print/order', 'id' => $model->id],
                             ['onclick' => "window.open(this.href, 'Печать Акта', 'height=600, width=800,toolbar=0,location=0,menubar=0'); return false;"]);
                     }
                 ]
@@ -151,7 +220,7 @@ if (Yii::$app->session->hasFlash('print_act'))
 
 
 
-        ],
+        ]
     ]); ?>
 
 

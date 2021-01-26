@@ -23,7 +23,8 @@
         "yiisoft/yii2-jui": "^2.0",
         "kartik-v/yii2-date-range": "dev-master",
         "alexantr/yii2-ace": "^1.1",
-        "richardfan1126/yii2-sortable-gridview": "*"
+        "richardfan1126/yii2-sortable-gridview": "*",
+        "kartik-v/yii2-export": "@dev"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

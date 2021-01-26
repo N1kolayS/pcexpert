@@ -20,6 +20,7 @@ class OrderSearch extends Order
     public $equipment_kind;
     public $equipment_brand;
     public $equipment_sample;
+    public $equipment_serial_number;
 
     /**
      * {@inheritdoc}
@@ -31,7 +32,7 @@ class OrderSearch extends Order
             [['created_at', 'hired_at', 'closed_at', 'problems', 'kit', 'comment'], 'safe'],
             [['prepayment', 'cost'], 'number'],
             [['date_from', 'date_to'], 'date', 'format' => 'php:Y-m-d'],
-            [['date_range', 'client_fio', 'client_phone', 'equipment_kind', 'equipment_brand', 'equipment_sample'], 'string'],
+            [['date_range', 'client_fio', 'client_phone', 'equipment_kind', 'equipment_brand', 'equipment_sample', 'equipment_serial_number'], 'string'],
             [[ 'equipment_kind', 'equipment_brand', 'equipment_sample'], 'trim']
         ];
     }
@@ -78,6 +79,11 @@ class OrderSearch extends Order
             'desc' => [Equipment::tableName().'.brand' => SORT_DESC],
         ];
 
+        $dataProvider->sort->attributes['equipment_serial_number'] = [
+            'asc' => [Equipment::tableName().'.serial_number' => SORT_ASC],
+            'desc' => [Equipment::tableName().'.serial_number' => SORT_DESC],
+        ];
+
         $dataProvider->sort->attributes['equipment_sample'] = [
             'asc' => [Equipment::tableName().'.sample' => SORT_ASC],
             'desc' => [Equipment::tableName().'.sample' => SORT_DESC],
@@ -109,6 +115,7 @@ class OrderSearch extends Order
             Equipment::tableName().'.kind' => $this->equipment_kind,
             Equipment::tableName().'.brand' => $this->equipment_brand,
             Equipment::tableName().'.sample' => $this->equipment_sample,
+            Equipment::tableName().'.serial_number' => $this->equipment_serial_number,
             'placement' => $this->placement,
             'prepayment' => $this->prepayment,
             'cost' => $this->cost,
