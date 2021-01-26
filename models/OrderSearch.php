@@ -107,7 +107,7 @@ class OrderSearch extends Order
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
+            self::tableName().'.id' => $this->id,
             'hired_at' => $this->hired_at,
             'closed_at' => $this->closed_at,
             'equipment_id' => $this->equipment_id,
@@ -166,6 +166,11 @@ class OrderSearch extends Order
             'desc' => [Equipment::tableName().'.sample' => SORT_DESC],
         ];
 
+        $dataProvider->sort->attributes['equipment_serial_number'] = [
+            'asc' => [Equipment::tableName().'.serial_number' => SORT_ASC],
+            'desc' => [Equipment::tableName().'.serial_number' => SORT_DESC],
+        ];
+
         $dataProvider->sort->attributes['client_fio'] = [
             'asc' => [Client::tableName().'.fio' => SORT_ASC],
             'desc' => [Client::tableName().'.fio' => SORT_DESC],
@@ -184,7 +189,7 @@ class OrderSearch extends Order
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
+            self::tableName().'.id' => $this->id,
             'hired_at' => $this->hired_at,
             'closed_at' => $this->closed_at,
             'equipment_id' => $this->equipment_id,
@@ -192,6 +197,7 @@ class OrderSearch extends Order
             Equipment::tableName().'.kind' => $this->equipment_kind,
             Equipment::tableName().'.brand' => $this->equipment_brand,
             Equipment::tableName().'.sample' => $this->equipment_sample,
+            Equipment::tableName().'.serial_number' => $this->equipment_serial_number,
             'placement' => $this->placement,
             'prepayment' => $this->prepayment,
             'cost' => $this->cost,

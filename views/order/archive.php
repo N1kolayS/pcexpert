@@ -6,6 +6,8 @@ use kartik\daterange\DateRangePicker;
 use kartik\select2\Select2;
 use yii\web\JsExpression;
 use yii\helpers\Url;
+use app\models\Order;
+use kartik\export\ExportMenu;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\OrderSearch */
@@ -24,10 +26,68 @@ $css = <<<CSS
 CSS;
 $this->registerCss($css);
 
+
+$gridColumns = [
+    'id',
+    [
+
+        'attribute' => 'created_at',
+        'content' => function (Order $model) {
+            return Yii::$app->formatter->asDatetime($model->created_at, "dd MMMM yyyy HH:mm" );
+        }
+
+    ],
+    [
+        'attribute' => 'equipment_kind',
+        'content' => function (Order $model) {
+            return $model->equipment->kind;
+        }
+    ],
+    [
+        'attribute' => 'equipment_brand',
+        'content' => function (Order $model) {
+            return $model->equipment->brand;
+        }
+    ],
+    [
+        'attribute' => 'equipment_sample',
+        'content' => function ($model) {
+            return $model->equipment->sample;
+        }
+    ],
+    [
+        'attribute' => 'equipment_serial_number',
+        'content' => function (Order $model) {
+            return $model->equipment->serial_number;
+        }
+    ],
+    [
+        'attribute' => 'client_fio',
+        'content' => function (Order $model) {
+            return $model->client->fio;
+        }
+    ],
+    [
+        'attribute' => 'client_phone',
+        'content' => function (Order $model) {
+            return $model->client->phoneFormat;
+        }
+    ],
+    'comment',
+
+];
 ?>
 <div class="box box-primary">
 
     <div class="box-body">
+        <?php
+
+        // Renders a export dropdown menu
+        echo ExportMenu::widget([
+            'dataProvider' => $dataProvider,
+            'columns' => $gridColumns
+        ]);
+        ?>
 
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
@@ -66,13 +126,13 @@ $this->registerCss($css);
                 ],
                 [
                     'attribute' => 'equipment_kind',
-                    'content' => function ($model) {
+                    'content' => function (Order $model) {
                         return $model->equipment->kind;
                     }
                 ],
                 [
                     'attribute' => 'equipment_brand',
-                    'content' => function ($model) {
+                    'content' => function (Order $model) {
                         return $model->equipment->brand;
                     }
                 ],
@@ -80,6 +140,12 @@ $this->registerCss($css);
                     'attribute' => 'equipment_sample',
                     'content' => function ($model) {
                         return $model->equipment->sample;
+                    }
+                ],
+                [
+                    'attribute' => 'equipment_serial_number',
+                    'content' => function (Order $model) {
+                        return $model->equipment->serial_number;
                     }
                 ],
                 [
