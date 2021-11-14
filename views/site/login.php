@@ -19,25 +19,28 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php $form = ActiveForm::begin([
         'id' => 'login-form',
-        'layout' => 'horizontal',
-        'fieldConfig' => [
-          //  'template' => "{label}\n<div class=\"col-lg-3\">{input}</div>\n<div class=\"col-lg-8\">{error}</div>",
-          //  'labelOptions' => ['class' => 'col-lg-1 control-label'],
-        ],
+
+
     ]); ?>
 
-        <?= $form->field($model, 'email')->textInput(['autofocus' => true]) ?>
+        <?= $form->field($model, 'email', [
+            'template' => '<div class="form-group has-feedback">{input}<span class="glyphicon glyphicon-envelope form-control-feedback"></span></div><p>{error}</p>',
+        ])->textInput(['autofocus' => true, 'placeholder' => 'Email']) ?>
 
-        <?= $form->field($model, 'password')->passwordInput() ?>
+        <?= $form->field($model, 'password', [
+            'template' => '<div class="form-group has-feedback">{input}<span class="glyphicon glyphicon-lock form-control-feedback"></span></div><p>{error}</p>',
+        ])->passwordInput(['placeholder' => 'Password']) ?>
 
-        <?= $form->field($model, 'rememberMe')->checkbox([
-        ]) ?>
-
-        <div class="form-group">
-
-                <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
-
+        <div class="row">
+            <div class="col-xs-8">
+                <?= $form->field($model, 'rememberMe')->checkbox([
+                ]) ?>
+            </div>
+            <div class="col-xs-4">
+                <?= Html::submitButton('Login', ['class' => 'btn btn-primary btn-flat btn-block', 'name' => 'login-button']) ?>
+            </div>
         </div>
+
 
     <?php ActiveForm::end(); ?>
     </div>
