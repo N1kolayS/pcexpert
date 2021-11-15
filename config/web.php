@@ -2,12 +2,14 @@
 
 
 $db = array_merge(
-    require __DIR__ . '/local/db.php',
-    require __DIR__ . '/db.php'
+
+    require __DIR__ . '/db.php',
+    require __DIR__ . '/local/db.php'
 );
 $params = array_merge(
-    require __DIR__ . '/local/params.php',
-    require __DIR__ . '/params.php'
+    require __DIR__ . '/params.php',
+    require __DIR__ . '/local/params.php'
+
 );
 
 
