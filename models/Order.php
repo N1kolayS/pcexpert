@@ -64,12 +64,16 @@ class Order extends \yii\db\ActiveRecord
     }
 
     /**
-     * @param array $value
+     * @param array $arr
      */
-    public function setService(array $value)
+    public function setService(array $arr)
     {
-        $services = Service::find()->where(['id' => $value])->all();
-        $this->services = Json::encode($services);
+        $data = [];
+        foreach ($arr as $item)
+        {
+            $data[] = $item;
+        }
+        $this->services = Json::encode($data);
         $this->_service_set = true;
     }
 
@@ -100,7 +104,7 @@ class Order extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['created_at', 'hired_at', 'closed_at', 'service'], 'safe'],
@@ -202,7 +206,7 @@ class Order extends \yii\db\ActiveRecord
     /**
      * @return bool
      */
-    public function isArchived()
+    public function isArchived(): bool
     {
         return $this->status >= self::STATUS_CLOSE_PASSED;
     }
@@ -248,11 +252,13 @@ class Order extends \yii\db\ActiveRecord
         ];
     }
 
+
+
     /**
      * @param bool $insert
      * @return bool
      */
-    public function beforeSave($insert)
+    public function beforeSave($insert): bool
     {
         if ($this->isNewRecord) {
             $this->status = self::STATUS_START;
@@ -262,6 +268,10 @@ class Order extends \yii\db\ActiveRecord
         {
             $this->services = null;
         }
+        if ($this->isArchived()) {
+            $this->closed_at = date('Y-m-d H:i:s');
+        }
+
         return parent::beforeSave($insert);
     }
 

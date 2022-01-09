@@ -25,7 +25,7 @@ class OrderSearch extends Order
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['id', 'equipment_id', 'client_id', 'manager_id', 'master_id', 'status', 'placement'], 'integer'],
@@ -55,7 +55,7 @@ class OrderSearch extends Order
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search(array $params): ActiveDataProvider
     {
         $query = Order::find();
         $query->andWhere(['<', Order::tableName().'.status', Order::STATUS_CLOSE_PASSED]);
@@ -137,7 +137,7 @@ class OrderSearch extends Order
      * @param $params
      * @return ActiveDataProvider
      */
-    public function searchArchive($params)
+    public function searchArchive($params): ActiveDataProvider
     {
         $query = Order::find();
         $query->andWhere(['>=', Order::tableName().'.status', Order::STATUS_CLOSE_PASSED]);

@@ -2,11 +2,12 @@
 
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
-use kartik\select2\Select2;
 use yii\helpers\ArrayHelper;
-use app\models\Library;
 use yii\bootstrap\Modal;
 use \app\models\Service;
+use yii\jui\AutoComplete;
+use yii\web\JsExpression;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Order */
@@ -17,35 +18,70 @@ $this->params['breadcrumbs'][] = 'Заявка';
 
 $prepayment = $model->prepayment ?: 0;
 $cost  = $model->cost ?: 0;
-
+$data_service = ($model->services) ?: '[]';
 $js = <<< JS
-let modal_services = $("#modal_services");
-let current_service = $("#current_service");
-let totalCost = $("#totalCost");
-let prepayment = $prepayment;
+const DATA_SERVICE = $data_service
+const CURRENT_SERVICE = $("#current_service");
+const TOTAL_COST = $("#totalCost");
 
+const SERVICE_NAME      = $("#service_name");
+const SERVICE_GUARANTEE = $("#service_guarantee");
+
+const SERVICE_PRICE     = $("#service_price");
+const BTN_ADD_SERVICE   = $("#btn_add_service");
+
+let prepayment = $prepayment;
 let order_cost = $("#order-cost");
 
-$("#add_service").click(function() {
-  modal_services.modal('show');
-});
+let service_counter = 0;
 
-$(".service-add").click(function () {
-    
-    current_service.append('<tr>' +
-     '<td><input type="hidden" name="Order[service][]" value="'+ $(this).data('id') +'" /> '+ $(this).data('name') +'</td>' +
-     '<td>'+ $(this).data('guarantee') +'</td>' +
-     '<td></td>' +
-     '<td class="current_price" data-price="'+ $(this).data('price') +'">'+ $(this).data('price') +'</td>' +
-     '<td><a role="button" class="delete-item"><span class="glyphicon glyphicon-remove"></span></a></td>' +
-     '</tr>');
+$( document ).ready(function() {
+    console.log(DATA_SERVICE)
+    try {
+      
+      $.each(DATA_SERVICE, function (index, value) {
+        addService(value.name, value.guarantee, value.price)  
+    });
+    }
+    catch (e) {
+      console.log(e)
+    }
     countCost();
 });
 
-current_service.on('click', '.delete-item', function (){
+CURRENT_SERVICE.on('click', '.delete-item', function (){
    $(this).parent().parent().remove();
    countCost();
 });
+
+BTN_ADD_SERVICE.click(function(e) {
+    e.preventDefault()
+  addService(SERVICE_NAME.val(), SERVICE_GUARANTEE.val(), SERVICE_PRICE.val())  
+  $(".service-input").val('')
+  countCost();
+});
+
+function addService(name, guarantee, price) {
+  service_counter++;
+  CURRENT_SERVICE.append(`<tr>
+  <td><input type="hidden"  name="Order[service][`+service_counter+`][name]" value="` + name +`" />` + name +`</td>
+  <td><input type="hidden"  name="Order[service][`+service_counter+`][guarantee]" value="` + guarantee +`" />` + guarantee +`</td>
+  
+  <td class="current_price" data-price="` + price +`">
+  <input type="hidden"  name="Order[service][`+service_counter+`][price]" value="` + price +`" />` + price +`</td>
+  <td><a role="button" class="delete-item"><span class="glyphicon glyphicon-remove"></span></a></td>
+  </tr>`)
+}
+
+/**
+* 
+* @param data
+*/
+function setService(data) {
+    SERVICE_GUARANTEE.val(data.guarantee);
+    
+    SERVICE_PRICE.val(data.price);
+}
 
 function countCost()
 {
@@ -56,11 +92,25 @@ function countCost()
         console.log(price);
     });
     let total = cost - prepayment;
-    totalCost.html(cost);
+    TOTAL_COST.html(cost);
     order_cost.val(total);
 }
 JS;
 
+$css = <<<CSS
+.col-count {
+    width: 100px;
+}
+.col-price {
+    width: 100px;
+}
+
+.col-guarantee {
+    width: 200px;
+}
+CSS;
+
+$this->registerCss($css);
 $this->registerJs($js);
 ?>
 <?php $form = ActiveForm::begin(['id' => 'form_order']); ?>
@@ -112,38 +162,52 @@ $this->registerJs($js);
 
     <div class="col-md-8">
         <div class="box box-primary">
-            <div class="box-header">
-                <a role="button" id="add_service" class="btn btn-info" >Добавить работу </a>
-            </div>
+
             <div class="box-body">
                 <table class="table">
                     <thead>
                     <tr>
+                        <td>
+                            <?= AutoComplete::widget([
+                                'clientOptions' => [
+                                    'source' => Url::to(['ajax-get-services']),
+                                    'minLength' => 2,
+                                    'select' =>new JsExpression('function(event, ui) {
+                                this.value = ui.item.name;
+                                setService(ui.item)
+                                return false;
+                            }')
+                                ],
+                                'options' => [
+                                    'class' => 'form-control service-input',
+                                    'id' => 'service_name',
+                                    'placeholder' => 'Введите работы',
+                                ]
+                            ]);
+                            ?>
+                        </td>
+                        <td><input type="text" placeholder="Гарантия" class="form-control service-input" id="service_guarantee" > </td>
+                        <td><input type="text" placeholder="Цена"     class="form-control service-input" id="service_price" > </td>
+                        <td><button class="btn btn-sm btn-success" id="btn_add_service"> <span class="glyphicon glyphicon-plus"></span> </button> </td>
 
+                    </tr>
+                    <tr>
                         <th>Работа, комплектующие</th>
-                        <th>Гарантия</th>
-                        <th>Кол-во</th>
-                        <th>Цена</th>
+                        <th class="col-guarantee">Гарантия</th>
+
+                        <th class="col-price">Цена</th>
                         <th>#</th>
                     </tr>
                     </thead>
                     <tbody id="current_service">
-                    <?php foreach ($model->service as $service): ?>
-                    <tr>
-                        <td><input type="hidden" name="Order[service][]" value="<?=$service['id']?>" /> <?=$service['name']?></td>
-                        <td><?=$service['guarantee']?></td>
-                        <td></td>
-                        <td class="current_price" data-price="<?=$service['price']?>"><?=$service['price']?></td>
-                        <td><a role="button" class="delete-item"><span class="glyphicon glyphicon-remove"></span></a></td>
-                    </tr>
-                    <?php endforeach; ?>
+
                     </tbody>
                     <tfoot>
                     <tr>
 
                         <td></td>
                         <td>Итоговая сумма</td>
-                        <td></td>
+
                         <td><span id="totalCost"><?=array_sum(ArrayHelper::getColumn($model->service, 'price'))?></span> </td>
                         <td></td>
                     </tr>
@@ -151,7 +215,7 @@ $this->registerJs($js);
 
                         <td></td>
                         <td>Внесенная предоплата</td>
-                        <td></td>
+
                         <td><?= $form->field($model, 'prepayment')->textInput()->label(false) ?> </td>
                         <td></td>
                     </tr>
@@ -159,7 +223,7 @@ $this->registerJs($js);
 
                         <td></td>
                         <td>Конечная цена</td>
-                        <td></td>
+
                         <td><?= $form->field($model, 'cost')->textInput()->label(false) ?> </td>
                         <td></td>
                     </tr>
@@ -167,7 +231,7 @@ $this->registerJs($js);
 
                         <td></td>
                         <td>Скидка</td>
-                        <td></td>
+
                         <td><span>0</span> </td>
                         <td></td>
                     </tr>

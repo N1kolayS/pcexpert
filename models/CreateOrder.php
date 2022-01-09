@@ -162,7 +162,7 @@ class CreateOrder extends Model
     private function addEquipment(Client $client)
     {
         $equipment = Equipment::findOne($this->equipment_id);
-        if ((!$equipment)&&($client)) {
+        if ((!$equipment)) {
             $equipment = new Equipment();
             $equipment->kind = $this->equipment_kind;
             $equipment->brand = $this->equipment_brand;

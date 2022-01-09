@@ -7,6 +7,7 @@ use app\models\Client;
 use app\models\CreateOrder;
 use app\models\Kind;
 use app\models\Sample;
+use app\models\Service;
 use app\models\User;
 use Yii;
 use app\models\Order;
@@ -43,7 +44,8 @@ class OrderController extends Controller
                     ],
                     [
                         'actions' => ['index', 'update',  'archive',
-                            'ajax-get-equipment-kind', 'ajax-get-equipment-brand', 'ajax-get-equipment-sample', 'ajax-get-clients'],
+                            'ajax-get-equipment-kind', 'ajax-get-equipment-brand', 'ajax-get-equipment-sample',
+                            'ajax-get-clients', 'ajax-get-services'],
                         'allow' => true,
                         'roles' => [User::ROLE_REPAIRER],
                     ],
@@ -183,13 +185,12 @@ class OrderController extends Controller
      * @param $term
      * @return array[]|\string[][]
      */
-    public function actionAjaxGetClients($term)
+    public function actionAjaxGetClients($term): array
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $data = [];
         if ($term)
         {
-            $data = [];
             /**
              * @var $models Client[]
              */
@@ -209,13 +210,41 @@ class OrderController extends Controller
     }
 
     /**
+     * @param $term
+     * @return array
+     */
+    public function actionAjaxGetServices($term): array
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $data = [];
+        if ($term)
+        {
+            /**
+             * @var $models Service[]
+             */
+            $models = Service::find()->where(['like', 'name', $term])->limit(20)->all();
+            foreach ($models as $model)
+            {
+                $data[] = [
+                    'id' => $model->id,
+                    'name' => $model->name,
+                    'label' => $model->name. ' ('. $model->guarantee. ') '. $model->price,
+                    'guarantee' => $model->guarantee,
+                    'price' => $model->price
+                ];
+            }
+        }
+        return $data;
+    }
+
+    /**
      * Updates an existing Order model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUpdate(int $id)
     {
         $model = $this->findModel($id);
 

@@ -24,7 +24,7 @@
         "kartik-v/yii2-date-range": "dev-master",
         "alexantr/yii2-ace": "^1.1",
         "richardfan1126/yii2-sortable-gridview": "*",
-        "kartik-v/yii2-export": "@dev"
+        "kartik-v/yii2-export": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
@@ -42,6 +42,9 @@
         "process-timeout": 1800,
         "fxp-asset": {
             "enabled": false
+        },
+        "allow-plugins": {
+            "yiisoft/yii2-composer": true
         }
     },
     "scripts": {
