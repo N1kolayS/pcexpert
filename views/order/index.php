@@ -26,6 +26,7 @@ $css = <<<CSS
     padding-right: 0 !important;
 }
 
+
 CSS;
 $this->registerCss($css);
 if (Yii::$app->session->hasFlash('print_order_id'))
@@ -95,20 +96,24 @@ $gridColumns = [
 <div class="box box-primary">
     <div class="box-header with-border">
         <?= Html::a('Создать заявку', ['create'], ['class' => 'btn btn-success']) ?>
-    </div>
-    <div class="box-body">
-        <?php
+        <div class="pull-right">
+            <?= ExportMenu::widget([
+                'dataProvider' => $dataProvider,
+                'columns' => $gridColumns
+            ]);
+            ?>
+        </div>
 
-        // Renders a export dropdown menu
-        echo ExportMenu::widget([
-            'dataProvider' => $dataProvider,
-            'columns' => $gridColumns
-        ]);
-        ?>
+    </div>
+    <div class="box-body table-responsive">
+
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'tableOptions' => [
+                'class' => 'table table-striped table-hover table-bordered'
+        ],
         'rowOptions'=>function (Order  $model, $key, $index, $grid) {
             return [
                 'class'=> $model->statusColor
