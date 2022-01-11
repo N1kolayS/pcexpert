@@ -241,7 +241,7 @@ $gridColumns = [
                     [
                         'attribute' => 'equipment_serial_number',
                         'content' => function (Order $model) {
-                            return $model->equipment->kind. ' '. $model->equipment->brand. ' '. $model->equipment->sample.
+                            return $model->equipment->kind. ' '.Html::tag('strong', $model->equipment->brand) . ' '. $model->equipment->sample.' '.
                                 Html::tag('span', $model->equipment->serial_number, ['class' => 'text-muted']);
                         }
                     ],
@@ -252,7 +252,7 @@ $gridColumns = [
                             'model' => $searchModel,
                             'attribute' => 'client_fio',
                             'initValueText' => ($searchModel->client) ? $searchModel->client->fio : '',
-                            'theme' => Select2::THEME_BOOTSTRAP,
+
                             'options' => [
                                 'placeholder' => 'ФИО клиента',
                                 'multiple' => false,
@@ -273,7 +273,8 @@ $gridColumns = [
                             ],
                         ]),
                         'content' => function (Order $model) {
-                            return $model->client->fio.' <br>'.$model->client->phoneFormat;
+                            return $model->client->fio.' <br> '.
+                                Html::tag('span', $model->client->phoneFormat, ['class' => 'text-nowrap']);
                         }
                     ],
 
