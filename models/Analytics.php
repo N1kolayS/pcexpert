@@ -97,13 +97,13 @@ class Analytics extends Model
     ): array
     {
         return [
-            Order::find()->where(['DATE(created_at)' => $Monday->format('Y-m-d')])->sum('cost'),
-            Order::find()->where(['DATE(created_at)' => $Tuesday->format('Y-m-d')])->sum('cost'),
-            Order::find()->where(['DATE(created_at)' => $Wednesday->format('Y-m-d')])->sum('cost'),
-            Order::find()->where(['DATE(created_at)' => $Thursday->format('Y-m-d')])->sum('cost'),
-            Order::find()->where(['DATE(created_at)' => $Friday->format('Y-m-d')])->sum('cost'),
-            Order::find()->where(['DATE(created_at)' => $Saturday->format('Y-m-d')])->sum('cost'),
-            Order::find()->where(['DATE(created_at)' => $Sunday->format('Y-m-d')])->sum('cost'),
+            Order::find()->where(['DATE(created_at)' => $Monday->format('Y-m-d')])->sum('cost') ?: 0,
+            Order::find()->where(['DATE(created_at)' => $Tuesday->format('Y-m-d')])->sum('cost') ?: 0,
+            Order::find()->where(['DATE(created_at)' => $Wednesday->format('Y-m-d')])->sum('cost') ?: 0,
+            Order::find()->where(['DATE(created_at)' => $Thursday->format('Y-m-d')])->sum('cost') ?: 0,
+            Order::find()->where(['DATE(created_at)' => $Friday->format('Y-m-d')])->sum('cost') ?: 0,
+            Order::find()->where(['DATE(created_at)' => $Saturday->format('Y-m-d')])->sum('cost') ?: 0,
+            Order::find()->where(['DATE(created_at)' => $Sunday->format('Y-m-d')])->sum('cost') ?: 0,
         ];
     }
 
@@ -116,7 +116,7 @@ class Analytics extends Model
      * @param \DateTime $Friday
      * @param \DateTime $Saturday
      * @param \DateTime $Sunday
-     * @return array
+     * @return int[]
      */
     private static function qtyByWeek(
         \DateTime $Monday,

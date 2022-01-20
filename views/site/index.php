@@ -9,7 +9,7 @@ $this->title = 'Дашборды';
 ?>
 <div class="row">
 
-    <div class="col-xs-12">
+    <div class="col-md-6 col-xs-12">
         <div class="box box-warning">
             <div class="box-header with-border">
                 <h3 class="box-title">Доходы за неделю</h3>
@@ -18,7 +18,7 @@ $this->title = 'Дашборды';
                 <?= ChartJs::widget([
                     'type' => 'line',
                     'options' => [
-                        'height' => 100,
+                        'height' => 200,
                         'width' => 400
                     ],
                     'data' => [
@@ -51,6 +51,9 @@ $this->title = 'Дашборды';
             </div>
         </div>
 
+
+    </div>
+    <div class="col-md-6 col-xs-12">
         <div class="box box-warning">
             <div class="box-header with-border">
                 <h3 class="box-title">Количество заявок за неделю</h3>
@@ -59,7 +62,7 @@ $this->title = 'Дашборды';
                 <?= ChartJs::widget([
                     'type' => 'line',
                     'options' => [
-                        'height' => 100,
+                        'height' => 200,
                         'width' => 400
                     ],
                     'data' => [
@@ -92,5 +95,4 @@ $this->title = 'Дашборды';
             </div>
         </div>
     </div>
-
 </div>
