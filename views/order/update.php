@@ -30,10 +30,24 @@ const SERVICE_GUARANTEE = $("#service_guarantee");
 const SERVICE_PRICE     = $("#service_price");
 const BTN_ADD_SERVICE   = $("#btn_add_service");
 
+const MODAL_SERVICES = $("#modal_services");
+
 let prepayment = $prepayment;
 let order_cost = $("#order-cost");
 
 let service_counter = 0;
+
+$("#add_service").click(function() {
+  MODAL_SERVICES.modal('show');
+});
+
+$(".service-add").click(function () {
+    
+
+    addService($(this).data('name'), $(this).data('guarantee'), $(this).data('price')) 
+    countCost();
+});
+
 
 $( document ).ready(function() {
     console.log(DATA_SERVICE)
@@ -67,7 +81,7 @@ function addService(name, guarantee, price) {
   <td><input type="hidden"  name="Order[service][`+service_counter+`][name]" value="` + name +`" />` + name +`</td>
   <td><input type="hidden"  name="Order[service][`+service_counter+`][guarantee]" value="` + guarantee +`" />` + guarantee +`</td>
   
-  <td class="current_price" data-price="` + price +`">
+  <td class="current_price text-right" data-price="` + price +`">
   <input type="hidden"  name="Order[service][`+service_counter+`][price]" value="` + price +`" />` + price +`</td>
   <td><a role="button" class="delete-item"><span class="glyphicon glyphicon-remove"></span></a></td>
   </tr>`)
@@ -107,6 +121,17 @@ $css = <<<CSS
 
 .col-guarantee {
     width: 200px;
+}
+.input-price {
+    text-align: right;
+}
+.table-foot-price input {
+    text-align: right;
+    padding-right: 4px;
+    padding-left: 4px;
+}
+.table-foot-price .form-group {
+    margin-bottom: 0;
 }
 CSS;
 
@@ -162,7 +187,9 @@ $this->registerJs($js);
 
     <div class="col-md-8">
         <div class="box box-primary">
-
+            <div class="box-header  with-border">
+                <a role="button" id="add_service" class="btn btn-sm btn-info" >Добавить из списка</a>
+            </div>
             <div class="box-body">
                 <table class="table">
                     <thead>
@@ -187,8 +214,13 @@ $this->registerJs($js);
                             ?>
                         </td>
                         <td><input type="text" placeholder="Гарантия" class="form-control service-input" id="service_guarantee" > </td>
-                        <td><input type="text" placeholder="Цена"     class="form-control service-input" id="service_price" > </td>
-                        <td><button class="btn btn-sm btn-success" id="btn_add_service"> <span class="glyphicon glyphicon-plus"></span> </button> </td>
+                        <td><input type="text" placeholder="Цена"     class="form-control service-input input-price" id="service_price" > </td>
+                        <td>
+                            <button class="btn btn-sm btn-success" id="btn_add_service"> <span class="glyphicon glyphicon-plus"></span> </button>
+
+
+
+                        </td>
 
                     </tr>
                     <tr>
@@ -202,39 +234,23 @@ $this->registerJs($js);
                     <tbody id="current_service">
 
                     </tbody>
-                    <tfoot>
+                    <tfoot class="table-foot-price">
                     <tr>
-
-                        <td></td>
-                        <td>Итоговая сумма</td>
-
-                        <td><span id="totalCost"><?=array_sum(ArrayHelper::getColumn($model->service, 'price'))?></span> </td>
+                        <td colspan="2" class="text-right"><span class="text-muted">Итоговая сумма</td>
+                        <td class="text-right"><strong id="totalCost"><?=array_sum(ArrayHelper::getColumn($model->service, 'price'))?></strong> </td>
                         <td></td>
                     </tr>
                     <tr>
-
-                        <td></td>
-                        <td>Внесенная предоплата</td>
-
+                        <td colspan="2"  class="text-right"><span class="text-muted">Внесенная предоплата</span> </td>
                         <td><?= $form->field($model, 'prepayment')->textInput()->label(false) ?> </td>
                         <td></td>
                     </tr>
                     <tr>
-
-                        <td></td>
-                        <td>Конечная цена</td>
-
+                        <td colspan="2" class="text-right"><span class="text-muted">Конечная цена</span></td>
                         <td><?= $form->field($model, 'cost')->textInput()->label(false) ?> </td>
                         <td></td>
                     </tr>
-                    <tr>
 
-                        <td></td>
-                        <td>Скидка</td>
-
-                        <td><span>0</span> </td>
-                        <td></td>
-                    </tr>
                     </tfoot>
                 </table>
             </div>

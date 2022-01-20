@@ -206,7 +206,7 @@ $gridColumns = [
             <?= GridView::widget([
                 'dataProvider' => $dataProvider,
                 'filterModel' => $searchModel,
-                'rowOptions'=>function (\app\models\Order  $model, $key, $index, $grid) {
+                'rowOptions'=>function (Order  $model, $key, $index, $grid) {
                     return [
                         'class'=> $model->statusColor
                     ];

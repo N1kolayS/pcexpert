@@ -91,6 +91,7 @@ $this->registerJs($js);
                     [
                         'options' => ['class' => 'sidebar-menu tree', 'data-widget'=> 'tree'],
                         'items' => [
+                            ['label' => 'Дашборды', 'icon' => 'area-chart', 'url' => ['/site/index']],
                             ['label' => 'Заявки', 'icon' => 'tasks', 'url' => ['/order/index']],
                             ['label' => 'Архив', 'icon' => 'archive', 'url' => ['/order/archive']],
                             ['label' => 'Клиенты', 'icon' => 'users', 'url' => ['/client/index']],

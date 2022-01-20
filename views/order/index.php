@@ -200,13 +200,13 @@ $gridColumns = [
                         ],
                     ],
                 ]),
-                'content' => function (\app\models\Order $model) {
+                'content' => function (Order $model) {
                     return $model->client->fio;
                 }
             ],
             [
                 'attribute' => 'client_phone',
-                'content' => function (\app\models\Order $model) {
+                'content' => function (Order $model) {
                     return $model->client->phoneFormat;
                 }
             ],
