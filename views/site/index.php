@@ -1,6 +1,7 @@
 <?php
 
 /* @var $this yii\web\View */
+/* @var $analytics Analytics */
 
 use dosamigos\chartjs\ChartJs;
 use app\models\Analytics;
@@ -32,7 +33,7 @@ $this->title = 'Дашборды';
                                 'pointBorderColor' => "#fff",
                                 'pointHoverBackgroundColor' => "#fff",
                                 'pointHoverBorderColor' => "rgba(179,181,198,1)",
-                                'data' => Analytics::profitLastWeek()
+                                'data' => $analytics->profitLastWeek()
                             ],
                             [
                                 'label' => "Текущая неделя",
@@ -42,13 +43,38 @@ $this->title = 'Дашборды';
                                 'pointBorderColor' => "#fff",
                                 'pointHoverBackgroundColor' => "#fff",
                                 'pointHoverBorderColor' => "rgba(255,99,132,1)",
-                                'data' => Analytics::profitCurrentWeek()
+                                'data' => $analytics->profitThisWeek()
                             ]
                         ]
                     ]
                 ]);
                 ?>
             </div>
+            <div class="box-footer">
+                <div class="col-md-6 col-xs-12">
+                    <div class="description-block border-right">
+                        <span class="description-percentage text-grey"><i class="fa fa-caret"></i> </span>
+                        <h5 class="description-header"><?=Yii::$app->formatter->asCurrency($analytics->totalProfitLastWeek(), null,  [\NumberFormatter::MAX_SIGNIFICANT_DIGITS => 100]) ?></h5>
+                        <span class="description-text">Всего за прошлую неделю</span>
+                    </div>
+                    <!-- /.description-block -->
+                </div>
+
+                <div class="col-md-6 col-xs-12">
+                    <div class="description-block ">
+                        <?php if ($analytics->percentBetweenWeek()>0): ?>
+                            <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> <?=round($analytics->percentBetweenWeek(),2 )?>%</span>
+                        <?php else: ?>
+                            <span class="description-percentage text-red"><i class="fa fa-caret-down"></i> <?=round($analytics->percentBetweenWeek(), 2)?>%</span>
+                        <?php endif; ?>
+                        <h5 class="description-header"><?=Yii::$app->formatter->asCurrency($analytics->totalProfitThisWeek(),null,  [\NumberFormatter::MAX_SIGNIFICANT_DIGITS => 100]) ?></h5>
+                        <span class="description-text">Всего за эту неделю</span>
+                    </div>
+                    <!-- /.description-block -->
+                </div>
+
+            </div>
+
         </div>
 
 
@@ -76,7 +102,7 @@ $this->title = 'Дашборды';
                                 'pointBorderColor' => "#fff",
                                 'pointHoverBackgroundColor' => "#fff",
                                 'pointHoverBorderColor' => "rgba(179,181,198,1)",
-                                'data' => Analytics::qtyLastWeek()
+                                'data' => $analytics->qtyLastWeek()
                             ],
                             [
                                 'label' => "Текущая неделя",
@@ -86,7 +112,7 @@ $this->title = 'Дашборды';
                                 'pointBorderColor' => "#fff",
                                 'pointHoverBackgroundColor' => "#fff",
                                 'pointHoverBorderColor' => "rgba(255,99,132,1)",
-                                'data' => Analytics::qtyCurrentWeek()
+                                'data' => $analytics->qtyThisWeek()
                             ]
                         ]
                     ]

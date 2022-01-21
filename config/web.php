@@ -29,6 +29,11 @@ $config = [
             'defaultTimeZone'=>'Asia/Yekaterinburg',
             'class' => 'yii\i18n\Formatter',
             'dateFormat' => 'd MMMM yyyy',
+            'decimalSeparator' => '.',
+            'thousandSeparator' => ' ',
+            'currencyCode' => 'RUB',
+
+           // 'numberFormatterSymbols'=>[\NumberFormatter::CURRENCY_SYMBOL => ''],
         ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation

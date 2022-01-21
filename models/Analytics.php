@@ -7,72 +7,133 @@ use yii\base\Model;
 class Analytics extends Model
 {
 
+    private $_qtyLastWeek;
+    private $_qtyThisWeek;
 
+    private $_profitLastWeek;
+    private $_profitThisWeek;
+
+    /**
+     * @return bool|int|string|null
+     */
+    public static function qtyComplete()
+    {
+        return Order::find()->where(['status' => Order::STATUS_COMPLETE])->count();
+    }
+
+    /**
+     * Общий доход за эту неделю
+     * @return int
+     */
+    public function totalProfitThisWeek(): int
+    {
+        return array_sum($this->profitThisWeek());
+    }
+
+    /**
+     * Общий доход за прошлую неделю
+     * @return int
+     */
+    public function totalProfitLastWeek(): int
+    {
+        return array_sum($this->profitLastWeek());
+    }
+
+    /**
+     * @return float|int
+     */
+    public function percentBetweenWeek()
+    {
+        if ($this->totalProfitLastWeek() < $this->totalProfitThisWeek())
+        {
+            return ($this->totalProfitThisWeek()>0) ?  $this->totalProfitLastWeek()/$this->totalProfitThisWeek()*100 : 0;
+        }
+        else
+        {
+            return -(($this->totalProfitLastWeek()>0) ?  $this->totalProfitThisWeek()/$this->totalProfitLastWeek()*100 : 0);
+        }
+    }
 
     /**
      * Сумма дохода по дням недели за текущую неделю, массив из 7 значений по дням
      * @return int[]
      */
-    public static function profitCurrentWeek(): array
+    public function profitThisWeek(): array
     {
-        return self::profitByWeek(
-            new \DateTime('Monday this week'),
-            new \DateTime('Tuesday this week'),
-            new \DateTime('Wednesday this week'),
-            new \DateTime('Thursday this week'),
-            new \DateTime('Friday this week'),
-            new \DateTime('Saturday this week'),
-            new \DateTime('Sunday this week')
-        );
+        if (!$this->_profitThisWeek)
+        {
+            $this->_profitThisWeek = $this->profitByWeek(
+                new \DateTime('Monday this week'),
+                new \DateTime('Tuesday this week'),
+                new \DateTime('Wednesday this week'),
+                new \DateTime('Thursday this week'),
+                new \DateTime('Friday this week'),
+                new \DateTime('Saturday this week'),
+                new \DateTime('Sunday this week')
+            );
+        }
+        return $this->_profitThisWeek;
     }
 
     /**
      * Сумма дохода по дням недели за прошлую неделю, массив из 7 значений по дням
      * @return int[]
      */
-    public static function profitLastWeek(): array
+    public function profitLastWeek(): array
     {
-        return self::profitByWeek(
-            new \DateTime('Monday ago'),
-            new \DateTime('Tuesday ago'),
-            new \DateTime('Wednesday ago'),
-            new \DateTime('Thursday ago'),
-            new \DateTime('Friday ago'),
-            new \DateTime('Saturday ago'),
-            new \DateTime('Sunday ago')
-        );
+        if (!$this->_profitLastWeek)
+        {
+            $this->_profitLastWeek = $this->profitByWeek(
+                new \DateTime('Monday ago'),
+                new \DateTime('Tuesday ago'),
+                new \DateTime('Wednesday ago'),
+                new \DateTime('Thursday ago'),
+                new \DateTime('Friday ago'),
+                new \DateTime('Saturday ago'),
+                new \DateTime('Sunday ago')
+            );
+        }
+        return $this->_profitLastWeek;
     }
 
     /**
      * @return array
      */
-    public static function qtyCurrentWeek(): array
+    public function qtyThisWeek(): array
     {
-        return self::qtyByWeek(
-            new \DateTime('Monday this week'),
-            new \DateTime('Tuesday this week'),
-            new \DateTime('Wednesday this week'),
-            new \DateTime('Thursday this week'),
-            new \DateTime('Friday this week'),
-            new \DateTime('Saturday this week'),
-            new \DateTime('Sunday this week')
-        );
+        if (!$this->_qtyThisWeek)
+        {
+            $this->_qtyThisWeek = $this->qtyByWeek(
+                new \DateTime('Monday this week'),
+                new \DateTime('Tuesday this week'),
+                new \DateTime('Wednesday this week'),
+                new \DateTime('Thursday this week'),
+                new \DateTime('Friday this week'),
+                new \DateTime('Saturday this week'),
+                new \DateTime('Sunday this week')
+            );
+        }
+        return $this->_qtyThisWeek;
     }
 
     /**
      * @return array
      */
-    public static function qtyLastWeek(): array
+    public function qtyLastWeek(): array
     {
-        return self::qtyByWeek(
-            new \DateTime('Monday ago'),
-            new \DateTime('Tuesday ago'),
-            new \DateTime('Wednesday ago'),
-            new \DateTime('Thursday ago'),
-            new \DateTime('Friday ago'),
-            new \DateTime('Saturday ago'),
-            new \DateTime('Sunday ago')
-        );
+        if (!$this->_qtyLastWeek)
+        {
+            $this->_qtyLastWeek = $this->qtyByWeek(
+                new \DateTime('Monday ago'),
+                new \DateTime('Tuesday ago'),
+                new \DateTime('Wednesday ago'),
+                new \DateTime('Thursday ago'),
+                new \DateTime('Friday ago'),
+                new \DateTime('Saturday ago'),
+                new \DateTime('Sunday ago')
+            );
+        }
+        return $this->_qtyLastWeek;
     }
 
     /**
@@ -86,7 +147,7 @@ class Analytics extends Model
      * @param \DateTime $Sunday
      * @return int[]
      */
-    private static function profitByWeek(
+    private function profitByWeek(
         \DateTime $Monday,
         \DateTime $Tuesday,
         \DateTime $Wednesday,
@@ -118,7 +179,7 @@ class Analytics extends Model
      * @param \DateTime $Sunday
      * @return int[]
      */
-    private static function qtyByWeek(
+    private function qtyByWeek(
         \DateTime $Monday,
         \DateTime $Tuesday,
         \DateTime $Wednesday,
