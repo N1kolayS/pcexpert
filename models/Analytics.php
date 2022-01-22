@@ -46,11 +46,11 @@ class Analytics extends Model
     {
         if ($this->totalProfitLastWeek() < $this->totalProfitThisWeek())
         {
-            return ($this->totalProfitThisWeek()>0) ?  $this->totalProfitLastWeek()/$this->totalProfitThisWeek()*100 : 0;
+            return ($this->totalProfitThisWeek()>0) ? (100-$this->totalProfitLastWeek()/$this->totalProfitThisWeek()*100)  : 0;
         }
         else
         {
-            return -(($this->totalProfitLastWeek()>0) ?  $this->totalProfitThisWeek()/$this->totalProfitLastWeek()*100 : 0);
+            return -(($this->totalProfitLastWeek()>0) ? (100-$this->totalProfitThisWeek()/$this->totalProfitLastWeek()*100)  : 0);
         }
     }
 
