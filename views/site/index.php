@@ -57,20 +57,35 @@ $this->title = 'Дашборды';
                         <h5 class="description-header"><?=Yii::$app->formatter->asCurrency($analytics->totalProfitLastWeek(), null,  [\NumberFormatter::MAX_SIGNIFICANT_DIGITS => 100]) ?></h5>
                         <span class="description-text">Всего за прошлую неделю</span>
                     </div>
-                    <!-- /.description-block -->
+
+                    <div class="description-block border-right">
+                        <span class="description-percentage text-grey"><i class="fa fa-caret"></i> </span>
+                        <h5 class="description-header"><?=Yii::$app->formatter->asCurrency(round($analytics->avgProfitLastWeek()), null,  [\NumberFormatter::MAX_SIGNIFICANT_DIGITS => 100]) ?></h5>
+                        <span class="description-text">Средняя стоимость</span>
+                    </div>
                 </div>
 
                 <div class="col-md-6 col-xs-12">
                     <div class="description-block ">
-                        <?php if ($analytics->percentBetweenWeek()>0): ?>
-                            <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> <?=round($analytics->percentBetweenWeek(),2 )?>%</span>
+                        <?php if ($analytics->percentBetweenProfitWeek()>0): ?>
+                            <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> <?=round($analytics->percentBetweenProfitWeek(),2 )?>%</span>
                         <?php else: ?>
-                            <span class="description-percentage text-red"><i class="fa fa-caret-down"></i> <?=round($analytics->percentBetweenWeek(), 2)?>%</span>
+                            <span class="description-percentage text-red"><i class="fa fa-caret-down"></i> <?=round($analytics->percentBetweenProfitWeek(), 2)?>%</span>
                         <?php endif; ?>
                         <h5 class="description-header"><?=Yii::$app->formatter->asCurrency($analytics->totalProfitThisWeek(),null,  [\NumberFormatter::MAX_SIGNIFICANT_DIGITS => 100]) ?></h5>
                         <span class="description-text">Всего за эту неделю</span>
                     </div>
                     <!-- /.description-block -->
+
+                    <div class="description-block border-right">
+                        <?php if ($analytics->percentBetweenAvgProfitWeek()>0): ?>
+                            <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> <?=round($analytics->percentBetweenAvgProfitWeek(),2 )?>%</span>
+                        <?php else: ?>
+                            <span class="description-percentage text-red"><i class="fa fa-caret-down"></i> <?=round($analytics->percentBetweenAvgProfitWeek(), 2)?>%</span>
+                        <?php endif; ?>
+                        <h5 class="description-header"><?=Yii::$app->formatter->asCurrency(round($analytics->avgProfitThisWeek()), null,  [\NumberFormatter::MAX_SIGNIFICANT_DIGITS => 100]) ?></h5>
+                        <span class="description-text">Средняя стоимость</span>
+                    </div>
                 </div>
 
             </div>
@@ -118,6 +133,27 @@ $this->title = 'Дашборды';
                     ]
                 ]);
                 ?>
+            </div>
+            <div class="box-footer">
+                <div class="col-md-6 col-xs-12">
+                    <div class="description-block border-right">
+                        <span class="description-percentage text-grey"><i class="fa fa-caret"></i> </span>
+                        <h5 class="description-header"><?=$analytics->totalQtyLastWeek()?></h5>
+                        <span class="description-text">Всего за прошлую неделю</span>
+                    </div>
+                </div>
+                <div class="col-md-6 col-xs-12">
+                    <div class="description-block ">
+                        <?php if ($analytics->percentBetweenQtyWeek()>0): ?>
+                            <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> <?=round($analytics->percentBetweenQtyWeek(),2 )?>%</span>
+                        <?php else: ?>
+                            <span class="description-percentage text-red"><i class="fa fa-caret-down"></i> <?=round($analytics->percentBetweenQtyWeek(), 2)?>%</span>
+                        <?php endif; ?>
+                        <h5 class="description-header"><?=$analytics->totalQtyThisWeek()?></h5>
+                        <span class="description-text">Всего за эту неделю</span>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

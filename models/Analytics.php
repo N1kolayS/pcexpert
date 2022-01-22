@@ -40,9 +40,46 @@ class Analytics extends Model
     }
 
     /**
+     * Общее кол-во заявок за прошлую неделю
+     * @return int
+     */
+    public function totalQtyLastWeek(): int
+    {
+        return array_sum($this->qtyLastWeek());
+    }
+
+    /**
+     * Общее кол-во заявок за текущую неделю
+     * @return int
+     */
+    public function totalQtyThisWeek(): int
+    {
+        return array_sum($this->qtyThisWeek());
+    }
+
+    /**
+     * Средняя стоимость одной заявки за прошедшую неделю
      * @return float|int
      */
-    public function percentBetweenWeek()
+    public function avgProfitLastWeek()
+    {
+        return ($this->qtyLastWeek()>0) ? $this->totalProfitLastWeek() / $this->totalQtyLastWeek() : 0;
+    }
+
+    /**
+     * Средняя стоимость одной заявки за эту неделю
+     * @return float|int
+     */
+    public function avgProfitThisWeek()
+    {
+        return ($this->qtyThisWeek()>0) ? $this->totalProfitThisWeek() / $this->totalQtyThisWeek() : 0;
+    }
+
+    /**
+     * Процентное отношение общего дохода
+     * @return float|int
+     */
+    public function percentBetweenProfitWeek()
     {
         if ($this->totalProfitLastWeek() < $this->totalProfitThisWeek())
         {
@@ -51,6 +88,38 @@ class Analytics extends Model
         else
         {
             return -(($this->totalProfitLastWeek()>0) ? (100-$this->totalProfitThisWeek()/$this->totalProfitLastWeek()*100)  : 0);
+        }
+    }
+
+    /**
+     * Процентное отношение средней стоимости заявки
+     * @return float|int
+     */
+    public function percentBetweenAvgProfitWeek()
+    {
+        if ($this->avgProfitLastWeek() < $this->avgProfitThisWeek())
+        {
+            return ($this->avgProfitThisWeek()>0) ? (100-$this->avgProfitLastWeek()/$this->avgProfitThisWeek()*100)  : 0;
+        }
+        else
+        {
+            return -(($this->avgProfitLastWeek()>0) ? (100-$this->avgProfitThisWeek()/$this->avgProfitLastWeek()*100)  : 0);
+        }
+    }
+
+    /**
+     * Процентное отношение количества заявок
+     * @return float|int
+     */
+    public function percentBetweenQtyWeek()
+    {
+        if ($this->totalQtyLastWeek() < $this->totalQtyThisWeek())
+        {
+            return ($this->totalQtyThisWeek()>0) ? (100-$this->totalQtyLastWeek()/$this->totalQtyThisWeek()*100)  : 0;
+        }
+        else
+        {
+            return -(($this->totalQtyLastWeek()>0) ? (100-$this->totalQtyThisWeek()/$this->totalQtyLastWeek()*100)  : 0);
         }
     }
 
