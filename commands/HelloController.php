@@ -35,14 +35,14 @@ class HelloController extends Controller
 
     public function actionTestDate()
     {
-        $previousMonday = new \DateTime('Monday ago');
+        $previousMonday = new \DateTime('Tuesday this week -7 day');
         print_r($previousMonday->format('Y-m-d')).PHP_EOL;
         $orders = Order::find()->where(['DATE(created_at)' => $previousMonday->format('Y-m-d')])->sum('cost');
         echo PHP_EOL;
-        print_r($orders);
+        #print_r($orders);
         echo PHP_EOL;
 
-        $currentMonday = new \DateTime('Monday this week');
+        $currentMonday = new \DateTime('Tuesday this week');
         print_r($currentMonday->format('Y-m-d')).PHP_EOL;
     }
 }

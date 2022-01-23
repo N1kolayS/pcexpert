@@ -4,6 +4,9 @@ namespace app\models;
 
 use yii\base\Model;
 
+/**
+ * Аналитика
+ */
 class Analytics extends Model
 {
 
@@ -153,13 +156,13 @@ class Analytics extends Model
         if (!$this->_profitLastWeek)
         {
             $this->_profitLastWeek = $this->profitByWeek(
-                new \DateTime('Monday ago'),
-                new \DateTime('Tuesday ago'),
-                new \DateTime('Wednesday ago'),
-                new \DateTime('Thursday ago'),
-                new \DateTime('Friday ago'),
-                new \DateTime('Saturday ago'),
-                new \DateTime('Sunday ago')
+                new \DateTime('Monday  this week -7 day'),
+                new \DateTime('Tuesday  this week -7 day'),
+                new \DateTime('Wednesday  this week -7 day'),
+                new \DateTime('Thursday  this week -7 day'),
+                new \DateTime('Friday  this week -7 day'),
+                new \DateTime('Saturday  this week -7 day'),
+                new \DateTime('Sunday  this week -7 day')
             );
         }
         return $this->_profitLastWeek;
@@ -193,13 +196,13 @@ class Analytics extends Model
         if (!$this->_qtyLastWeek)
         {
             $this->_qtyLastWeek = $this->qtyByWeek(
-                new \DateTime('Monday ago'),
-                new \DateTime('Tuesday ago'),
-                new \DateTime('Wednesday ago'),
-                new \DateTime('Thursday ago'),
-                new \DateTime('Friday ago'),
-                new \DateTime('Saturday ago'),
-                new \DateTime('Sunday ago')
+                new \DateTime('Monday  this week -7 day'),
+                new \DateTime('Tuesday  this week -7 day'),
+                new \DateTime('Wednesday  this week -7 day'),
+                new \DateTime('Thursday  this week -7 day'),
+                new \DateTime('Friday  this week -7 day'),
+                new \DateTime('Saturday  this week -7 day'),
+                new \DateTime('Sunday  this week -7 day')
             );
         }
         return $this->_qtyLastWeek;
