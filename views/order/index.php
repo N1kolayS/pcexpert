@@ -26,7 +26,9 @@ $css = <<<CSS
     padding-right: 0 !important;
 }
 
-
+.phone-link {
+    white-space: nowrap;
+}
 CSS;
 $this->registerCss($css);
 if (Yii::$app->session->hasFlash('print_order_id'))
@@ -159,13 +161,8 @@ $gridColumns = [
             [
                 'attribute' => 'equipment_brand',
                 'content' => function (Order $model) {
-                    return $model->equipment->brand;
-                }
-            ],
-            [
-                'attribute' => 'equipment_sample',
-                'content' => function ($model) {
-                    return $model->equipment->sample;
+                    return $model->equipment->brand. ' '.
+                        Html::tag('span', $model->equipment->sample, ['class' => 'text-muted']);
                 }
             ],
             [
@@ -201,15 +198,12 @@ $gridColumns = [
                     ],
                 ]),
                 'content' => function (Order $model) {
-                    return $model->client->fio;
+                    return $model->client->fio. ' '.
+                        Html::tag('a', $model->client->phoneFormat,
+                            ['href' => 'tel:'.$model->client->phone, 'class' => 'phone-link']);
                 }
             ],
-            [
-                'attribute' => 'client_phone',
-                'content' => function (Order $model) {
-                    return $model->client->phoneFormat;
-                }
-            ],
+
             'comment',
             [
                 'class' => 'yii\grid\ActionColumn',
