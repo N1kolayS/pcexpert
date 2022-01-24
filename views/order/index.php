@@ -200,7 +200,7 @@ $gridColumns = [
                 'content' => function (Order $model) {
                     return $model->client->fio. ' '.
                         Html::tag('a', $model->client->phoneFormat,
-                            ['href' => 'tel:'.$model->client->phone, 'class' => 'phone-link']);
+                            ['href' => 'tel:8'.$model->client->phone, 'class' => 'phone-link']);
                 }
             ],
 
