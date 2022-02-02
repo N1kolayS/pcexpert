@@ -66,7 +66,7 @@ class Analytics extends Model
      */
     public function avgProfitLastWeek()
     {
-        return ($this->qtyLastWeek()>0) ? $this->totalProfitLastWeek() / $this->totalQtyLastWeek() : 0;
+        return ($this->totalQtyLastWeek()>0) ? $this->totalProfitLastWeek() / $this->totalQtyLastWeek() : 0;
     }
 
     /**
