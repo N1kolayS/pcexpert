@@ -113,6 +113,7 @@ $gridColumns = [
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'formatter' => ['class' => 'yii\i18n\Formatter','nullDisplay' => ''],
         'tableOptions' => [
                 'class' => 'table table-striped table-hover table-bordered'
         ],
@@ -146,9 +147,10 @@ $gridColumns = [
                 ]),
                 'attribute' => 'created_at',
                 //'format' =>  ['date', 'php:d M Y H:i'],
-                'options' => ['width' => '185'],
+                'options' => ['width' => '100'],
                 'content' => function (Order $model) {
-                    return Html::a(Yii::$app->formatter->asDatetime($model->created_at, "dd MMMM yyyy HH:mm" ), ['update' ,'id' => $model->id]);
+                    return Html::a(Yii::$app->formatter->asDatetime($model->created_at, "dd LLL HH:mm" ),
+                        ['update' ,'id' => $model->id], ['title' => Yii::$app->formatter->asDatetime($model->created_at, "dd MMMM y HH:mm" )]);
                 }
 
             ],
@@ -204,8 +206,14 @@ $gridColumns = [
                         Html::a('<i class="fa fa-whatsapp"></i>', 'https://wa.me/7'.$model->client->phone, ['target' => '_blank']);
                 }
             ],
+            [
+                'attribute' => 'comment',
+                'content' => function (Order $model) {
+                    return $model->problems. ' <hr class="thin-rule" /> '. $model->comment;
+                }
+            ],
 
-            'comment',
+            'cost',
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => ' {print}',
