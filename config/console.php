@@ -1,16 +1,13 @@
 <?php
 
 
-$db = array_merge(
-
-    require __DIR__ . '/db.php',
-    require __DIR__ . '/local/db.php'
-);
 $params = array_merge(
+
     require __DIR__ . '/params.php',
     require __DIR__ . '/local/params.php'
-
 );
+
+
 $config = [
     'id' => 'basic-console',
     'basePath' => dirname(__DIR__),
@@ -36,7 +33,6 @@ $config = [
                 ],
             ],
         ],
-        'db' => $db,
     ],
     'params' => $params,
     /*
