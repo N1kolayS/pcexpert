@@ -23,7 +23,7 @@ class InitController extends Controller
      * @throws \yii\base\Exception
      * @throws \Exception
      */
-    public function actionIndex()
+    public function actionStart()
     {
         Yii::$app->runAction('migrate', ['migrationPath' => '@yii/rbac/migrations/']);
 
@@ -61,68 +61,8 @@ class InitController extends Controller
         Yii::$app->authManager->addChild($role_repairer, $role_user);
         /* */
         echo 'Управление правами успешно создано'. PHP_EOL;
-        echo 'Запустить "yii init/user-create Имя пароль email" для создания пользователя'. PHP_EOL;
+        echo 'Запустить "yii user/create Имя пароль email" для создания пользователя'. PHP_EOL;
     }
 
-    /**
-     * Создать пароль
-     * @param $username
-     * @param $password
-     * @param $email
-     * @throws \Exception
-     */
-    public function actionUserCreate($username, $password, $email)
-    {
-        if (Yii::$app->authManager->getRole(User::ROLE_DEFAULT))
-        {
-            $user = new User();
-            $user->username = $username;
-            $user->email = $email;
 
-            $user->setPassword($password);
-            $user->generateAuthKey();
-            $user->role = User::ROLE_ADMIN;
-            $user->status = User::STATUS_ACTIVE;
-
-            if ($user->save()) {
-                Yii::$app->authManager->revokeAll($user->id);
-                $userRole = Yii::$app->authManager->getRole(User::ROLE_ADMIN);
-                Yii::$app->authManager->assign($userRole, $user->id);
-                $user->updateAll(['role' => User::ROLE_ADMIN], $user->id);
-                echo $user->username. PHP_EOL;
-
-            }
-            else
-            {
-                echo var_dump($user->errors);
-            }
-        }
-        else
-        {
-            echo 'Roles not assigned, run init/rbac '.PHP_EOL;
-        }
-    }
-
-    /**
-     * Изменить пароль
-     * @param $username
-     * @param $password
-     */
-    public function actionChangePass($username, $password)
-    {
-        $user = User::findByUsername($username);
-        $user->setPassword($password);
-        $user->save();
-    }
-
-    /**
-     * @param $id
-     * @param $role
-     */
-    public function actionAssignRole($id, $role)
-    {
-        $user = User::findOne($id);
-        $user->role = $role;
-        $user->save();
-    }
 }
