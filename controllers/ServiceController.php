@@ -2,9 +2,11 @@
 
 namespace app\controllers;
 
+use app\models\User;
 use Yii;
 use app\models\Service;
 use app\models\ServiceSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -17,11 +19,21 @@ class ServiceController extends Controller
     /**
      * {@inheritdoc}
      */
-    public function behaviors()
+    public function behaviors(): array
     {
         return [
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'actions' => ['index', 'update', 'create', 'delete', 'view'],
+                        'allow' => true,
+                        'roles' => [User::ROLE_REPAIRER],
+                    ],
+                ],
+            ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['POST'],
                 ],
@@ -30,10 +42,9 @@ class ServiceController extends Controller
     }
 
     /**
-     * Lists all Service models.
-     * @return mixed
+     * @return string
      */
-    public function actionIndex()
+    public function actionIndex(): string
     {
         $searchModel = new ServiceSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -46,9 +57,7 @@ class ServiceController extends Controller
 
 
     /**
-     * Creates a new Service model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
+     * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
@@ -64,13 +73,11 @@ class ServiceController extends Controller
     }
 
     /**
-     * Updates an existing Service model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @param int $id
+     * @return string|\yii\web\Response
+     * @throws NotFoundHttpException
      */
-    public function actionUpdate($id)
+    public function actionUpdate(int $id)
     {
         $model = $this->findModel($id);
 
@@ -84,13 +91,13 @@ class ServiceController extends Controller
     }
 
     /**
-     * Deletes an existing Service model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @param int $id
+     * @return \yii\web\Response
+     * @throws NotFoundHttpException
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
-    public function actionDelete($id)
+    public function actionDelete(int $id): \yii\web\Response
     {
         $this->findModel($id)->delete();
 
@@ -104,7 +111,7 @@ class ServiceController extends Controller
      * @return Service the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    protected function findModel(int $id): Service
     {
         if (($model = Service::findOne($id)) !== null) {
             return $model;

@@ -19,11 +19,11 @@ class KindController extends Controller
     /**
      * {@inheritdoc}
      */
-    public function behaviors()
+    public function behaviors(): array
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                 'rules' => [
                     [
                         'actions' => ['index', 'update', 'create', 'delete', 'view'],
@@ -33,7 +33,7 @@ class KindController extends Controller
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['POST'],
                 ],
@@ -42,10 +42,9 @@ class KindController extends Controller
     }
 
     /**
-     * Lists all Kind models.
-     * @return mixed
+     * @return string
      */
-    public function actionIndex()
+    public function actionIndex(): string
     {
         $searchModel = new KindSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -58,9 +57,7 @@ class KindController extends Controller
 
 
     /**
-     * Creates a new Kind model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
+     * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
@@ -77,13 +74,11 @@ class KindController extends Controller
     }
 
     /**
-     * Updates an existing Kind model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @param int $id
+     * @return string|\yii\web\Response
+     * @throws NotFoundHttpException
      */
-    public function actionUpdate($id)
+    public function actionUpdate(int $id)
     {
         $model = $this->findModel($id);
 
@@ -98,13 +93,13 @@ class KindController extends Controller
     }
 
     /**
-     * Deletes an existing Kind model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @param int $id
+     * @return \yii\web\Response
+     * @throws NotFoundHttpException
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
-    public function actionDelete($id)
+    public function actionDelete(int $id): \yii\web\Response
     {
         $this->findModel($id)->delete();
 
@@ -112,13 +107,11 @@ class KindController extends Controller
     }
 
     /**
-     * Finds the Kind model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Kind the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
+     * @param int $id
+     * @return Kind
+     * @throws NotFoundHttpException
      */
-    protected function findModel($id)
+    protected function findModel(int $id): Kind
     {
         if (($model = Kind::findOne($id)) !== null) {
             return $model;

@@ -22,21 +22,21 @@ class UserController extends Controller
     /**
      * {@inheritdoc}
      */
-    public function behaviors()
+    public function behaviors(): array
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                 'rules' => [
                     [
                         'actions' => ['index', 'update', 'create', 'delete'],
                         'allow' => true,
-                        'roles' => ['admin'],
+                        'roles' => [User::ROLE_ADMIN],
                     ],
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['POST'],
 
@@ -47,10 +47,9 @@ class UserController extends Controller
     }
 
     /**
-     * Lists all User models.
-     * @return mixed
+     * @return string
      */
-    public function actionIndex()
+    public function actionIndex(): string
     {
         $searchModel = new UserSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -62,9 +61,7 @@ class UserController extends Controller
     }
 
     /**
-     * Creates a new User model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
+     * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
@@ -83,13 +80,11 @@ class UserController extends Controller
     }
 
     /**
-     * Updates an existing Update model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @param int $id
+     * @return string|\yii\web\Response
+     * @throws NotFoundHttpException
      */
-    public function actionUpdate($id)
+    public function actionUpdate(int $id)
     {
         $model = $this->findModel($id);
 
@@ -103,15 +98,13 @@ class UserController extends Controller
     }
 
     /**
-     * Deletes an existing User model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param $id
+     * @param int $id
      * @return \yii\web\Response
      * @throws NotFoundHttpException
      * @throws \Throwable
      * @throws \yii\db\StaleObjectException
      */
-    public function actionDelete($id)
+    public function actionDelete(int $id)
     {
         $this->findModel($id)->delete();
 
@@ -126,7 +119,7 @@ class UserController extends Controller
      * @return User the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    protected function findModel(int $id): User
     {
         if (($model = User::findOne($id)) !== null) {
             return $model;

@@ -19,11 +19,11 @@ class EquipmentController extends Controller
     /**
      * {@inheritdoc}
      */
-    public function behaviors()
+    public function behaviors(): array
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                 'rules' => [
                     [
                         'actions' => ['index', 'update', 'create', 'delete', 'view'],
@@ -33,7 +33,7 @@ class EquipmentController extends Controller
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['POST'],
                 ],
@@ -42,10 +42,9 @@ class EquipmentController extends Controller
     }
 
     /**
-     * Lists all Equipment models.
-     * @return mixed
+     * @return string
      */
-    public function actionIndex()
+    public function actionIndex(): string
     {
         $searchModel = new EquipmentSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -57,12 +56,11 @@ class EquipmentController extends Controller
     }
 
     /**
-     * Displays a single Equipment model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @param int $id
+     * @return string
+     * @throws NotFoundHttpException
      */
-    public function actionView($id)
+    public function actionView(int $id): string
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
@@ -70,15 +68,12 @@ class EquipmentController extends Controller
     }
 
 
-
     /**
-     * Updates an existing Equipment model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @param int $id
+     * @return string|\yii\web\Response
+     * @throws NotFoundHttpException
      */
-    public function actionUpdate($id)
+    public function actionUpdate(int $id)
     {
         $model = $this->findModel($id);
 
@@ -92,13 +87,13 @@ class EquipmentController extends Controller
     }
 
     /**
-     * Deletes an existing Equipment model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @param int $id
+     * @return \yii\web\Response
+     * @throws NotFoundHttpException
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
-    public function actionDelete($id)
+    public function actionDelete(int $id): \yii\web\Response
     {
         $this->findModel($id)->delete();
 
@@ -112,7 +107,7 @@ class EquipmentController extends Controller
      * @return Equipment the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    protected function findModel(int $id): Equipment
     {
         if (($model = Equipment::findOne($id)) !== null) {
             return $model;

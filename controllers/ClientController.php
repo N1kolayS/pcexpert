@@ -20,11 +20,11 @@ class ClientController extends Controller
     /**
      * {@inheritdoc}
      */
-    public function behaviors()
+    public function behaviors(): array
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                 'rules' => [
                     [
                         'actions' => ['index', 'update', 'create', 'delete', 'ajax-get'],
@@ -34,7 +34,7 @@ class ClientController extends Controller
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['POST'],
                 ],
@@ -43,10 +43,9 @@ class ClientController extends Controller
     }
 
     /**
-     * Lists all Client models.
-     * @return mixed
+     * @return string
      */
-    public function actionIndex()
+    public function actionIndex(): string
     {
         $searchModel = new ClientSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -59,9 +58,7 @@ class ClientController extends Controller
 
 
     /**
-     * Creates a new Client model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
+     * @return string|Response
      */
     public function actionCreate()
     {
@@ -78,13 +75,11 @@ class ClientController extends Controller
     }
 
     /**
-     * Updates an existing Client model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @param int $id
+     * @return string|Response
+     * @throws NotFoundHttpException
      */
-    public function actionUpdate($id)
+    public function actionUpdate(int $id)
     {
         $model = $this->findModel($id);
 
@@ -100,13 +95,13 @@ class ClientController extends Controller
     }
 
     /**
-     * Deletes an existing Client model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @param int $id
+     * @return Response
+     * @throws NotFoundHttpException
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
-    public function actionDelete($id)
+    public function actionDelete(int $id): Response
     {
         $this->findModel($id)->delete();
 
@@ -114,10 +109,10 @@ class ClientController extends Controller
     }
 
     /**
-     * @param $q
+     * @param string $q
      * @return array[]
      */
-    public function actionAjaxGet($q)
+    public function actionAjaxGet(string $q): array
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $data =  [];
@@ -142,7 +137,7 @@ class ClientController extends Controller
      * @return Client the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    protected function findModel(int $id): Client
     {
         if (($model = Client::findOne($id)) !== null) {
             return $model;

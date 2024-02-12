@@ -21,11 +21,11 @@ class SampleController extends Controller
     /**
      * {@inheritdoc}
      */
-    public function behaviors()
+    public function behaviors(): array
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                 'rules' => [
                     [
                         'actions' => ['index', 'update', 'create', 'delete', 'ajax-get-brand'],
@@ -35,7 +35,7 @@ class SampleController extends Controller
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['POST'],
                 ],
@@ -44,10 +44,9 @@ class SampleController extends Controller
     }
 
     /**
-     * Lists all Sample models.
-     * @return mixed
+     * @return string
      */
-    public function actionIndex()
+    public function actionIndex(): string
     {
         $searchModel = new SampleSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -59,12 +58,8 @@ class SampleController extends Controller
     }
 
 
-
-
     /**
-     * Creates a new Sample model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
+     * @return string|Response
      */
     public function actionCreate()
     {
@@ -81,13 +76,11 @@ class SampleController extends Controller
     }
 
     /**
-     * Updates an existing Sample model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @param int $id
+     * @return string|Response
+     * @throws NotFoundHttpException
      */
-    public function actionUpdate($id)
+    public function actionUpdate(int $id)
     {
         $model = $this->findModel($id);
 
@@ -103,10 +96,10 @@ class SampleController extends Controller
 
     /**
      * Варианты техники для Select2
-     * @param $q
+     * @param string $q
      * @return array[]
      */
-    public function actionAjaxGetBrand($q)
+    public function actionAjaxGetBrand(string $q): array
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $data =  [];
@@ -125,13 +118,13 @@ class SampleController extends Controller
     }
 
     /**
-     * Deletes an existing Sample model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @param int $id
+     * @return Response
+     * @throws NotFoundHttpException
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
-    public function actionDelete($id)
+    public function actionDelete(int $id)
     {
         $this->findModel($id)->delete();
 
@@ -145,7 +138,7 @@ class SampleController extends Controller
      * @return Sample the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    protected function findModel(int $id): Sample
     {
         if (($model = Sample::findOne($id)) !== null) {
             return $model;

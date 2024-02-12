@@ -2,9 +2,11 @@
 
 namespace app\controllers;
 
+use app\models\User;
 use Yii;
 use app\models\CatService;
 use app\models\CatServiceSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -18,11 +20,21 @@ class CatServiceController extends Controller
     /**
      * {@inheritdoc}
      */
-    public function behaviors()
+    public function behaviors(): array
     {
         return [
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'actions' => ['index', 'update', 'create', 'delete'],
+                        'allow' => true,
+                        'roles' => [User::ROLE_MANAGER],
+                    ],
+                ],
+            ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['POST'],
                 ],
@@ -33,12 +45,12 @@ class CatServiceController extends Controller
     /**
      * @return array|array[]
      */
-    public function actions()
+    public function actions(): array
     {
         return [
             'sortItem' => [
-                'class' => SortableAction::className(),
-                'activeRecordClassName' => CatService::className(),
+                'class' => SortableAction::class,
+                'activeRecordClassName' => CatService::class,
                 'orderColumn' => 'sort',
             ],
 
@@ -46,10 +58,9 @@ class CatServiceController extends Controller
     }
 
     /**
-     * Lists all CatService models.
-     * @return mixed
+     * @return string
      */
-    public function actionIndex()
+    public function actionIndex(): string
     {
         $searchModel = new CatServiceSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -62,9 +73,7 @@ class CatServiceController extends Controller
 
 
     /**
-     * Creates a new CatService model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
+     * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
@@ -80,13 +89,11 @@ class CatServiceController extends Controller
     }
 
     /**
-     * Updates an existing CatService model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @param int $id
+     * @return string|\yii\web\Response
+     * @throws NotFoundHttpException
      */
-    public function actionUpdate($id)
+    public function actionUpdate(int $id)
     {
         $model = $this->findModel($id);
 
@@ -100,13 +107,13 @@ class CatServiceController extends Controller
     }
 
     /**
-     * Deletes an existing CatService model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @param int $id
+     * @return \yii\web\Response
+     * @throws NotFoundHttpException
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
-    public function actionDelete($id)
+    public function actionDelete(int $id)
     {
         $this->findModel($id)->delete();
 
@@ -114,13 +121,11 @@ class CatServiceController extends Controller
     }
 
     /**
-     * Finds the CatService model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return CatService the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
+     * @param int $id
+     * @return CatService
+     * @throws NotFoundHttpException
      */
-    protected function findModel($id)
+    protected function findModel(int $id): CatService
     {
         if (($model = CatService::findOne($id)) !== null) {
             return $model;

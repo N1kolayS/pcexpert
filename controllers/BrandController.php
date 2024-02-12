@@ -19,11 +19,11 @@ class BrandController extends Controller
     /**
      * {@inheritdoc}
      */
-    public function behaviors()
+    public function behaviors(): array
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                 'rules' => [
                     [
                         'actions' => ['index', 'update', 'create', 'delete', 'ajax-get-brand'],
@@ -33,7 +33,7 @@ class BrandController extends Controller
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['POST'],
                 ],
@@ -42,10 +42,9 @@ class BrandController extends Controller
     }
 
     /**
-     * Lists all Brand models.
-     * @return mixed
+     * @return string
      */
-    public function actionIndex()
+    public function actionIndex(): string
     {
         $searchModel = new BrandSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -58,9 +57,7 @@ class BrandController extends Controller
 
 
     /**
-     * Creates a new Brand model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
+     * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
@@ -77,13 +74,11 @@ class BrandController extends Controller
     }
 
     /**
-     * Updates an existing Brand model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @param int $id
+     * @return string|\yii\web\Response
+     * @throws NotFoundHttpException
      */
-    public function actionUpdate($id)
+    public function actionUpdate(int $id)
     {
         $model = $this->findModel($id);
 
@@ -98,13 +93,13 @@ class BrandController extends Controller
     }
 
     /**
-     * Deletes an existing Brand model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @param int $id
+     * @return \yii\web\Response
+     * @throws NotFoundHttpException
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
-    public function actionDelete($id)
+    public function actionDelete(int $id): \yii\web\Response
     {
         $this->findModel($id)->delete();
 
@@ -118,7 +113,7 @@ class BrandController extends Controller
      * @return Brand the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    protected function findModel(int $id): Brand
     {
         if (($model = Brand::findOne($id)) !== null) {
             return $model;

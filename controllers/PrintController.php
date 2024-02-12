@@ -19,11 +19,11 @@ class PrintController extends Controller
     /**
      * {@inheritdoc}
      */
-    public function behaviors()
+    public function behaviors(): array
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                 'rules' => [
                     [
                         'actions' => ['order', 'close'],
@@ -36,11 +36,11 @@ class PrintController extends Controller
     }
 
     /**
-     * @param $id
+     * @param int $id order id
      * @return string
      * @throws NotFoundHttpException
      */
-    public function actionOrder($id)
+    public function actionOrder(int $id): string
     {
         $model = $this->findModelOrder($id);
         $template = Template::findOrder();
@@ -50,11 +50,11 @@ class PrintController extends Controller
     }
 
     /**
-     * @param $id
+     * @param int $id order id
      * @return string
      * @throws NotFoundHttpException
      */
-    public function actionClose($id)
+    public function actionClose(int $id): string
     {
         $model = $this->findModelOrder($id);
         $template = Template::findClose();
@@ -70,7 +70,7 @@ class PrintController extends Controller
      * @return Order the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModelOrder($id)
+    protected function findModelOrder(int $id): Order
     {
         if (($model = Order::findOne($id)) !== null) {
             return $model;

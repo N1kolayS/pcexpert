@@ -26,11 +26,11 @@ class OrderController extends Controller
     /**
      * {@inheritdoc}
      */
-    public function behaviors()
+    public function behaviors(): array
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                 'rules' => [
                     [
                         'actions' => ['delete'],
@@ -53,7 +53,7 @@ class OrderController extends Controller
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['POST'],
                 ],
@@ -62,10 +62,9 @@ class OrderController extends Controller
     }
 
     /**
-     * Lists all Order models.
-     * @return mixed
+     * @return string
      */
-    public function actionIndex()
+    public function actionIndex(): string
     {
         $searchModel = new OrderSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -80,7 +79,7 @@ class OrderController extends Controller
     /**
      * @return string
      */
-    public function actionArchive()
+    public function actionArchive(): string
     {
         $searchModel = new OrderSearch();
         $dataProvider = $searchModel->searchArchive(Yii::$app->request->queryParams);
@@ -93,9 +92,7 @@ class OrderController extends Controller
 
 
     /**
-     * Creates a new Order model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
+     * @return string|Response
      */
     public function actionCreate()
     {
@@ -113,10 +110,10 @@ class OrderController extends Controller
 
     /**
      * Получить типы оборудования под jquery autocomplete
-     * @param $term
-     * @return array[]|\string[][]
+     * @param string $term
+     * @return array[]
      */
-    public function actionAjaxGetEquipmentKind($term)
+    public function actionAjaxGetEquipmentKind(string $term): array
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $data =  [];
@@ -135,10 +132,10 @@ class OrderController extends Controller
     }
 
     /**
-     * @param $term
-     * @return array[]|\string[][]
+     * @param string $term
+     * @return array[]
      */
-    public function actionAjaxGetEquipmentBrand($term)
+    public function actionAjaxGetEquipmentBrand(string $term): array
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $data = [];
@@ -157,11 +154,11 @@ class OrderController extends Controller
     }
 
     /**
-     * @param $term
-     * @param $brand_id
-     * @return array[]
+     * @param string $term
+     * @param int $brand_id
+     * @return array
      */
-    public function actionAjaxGetEquipmentSample($term, $brand_id)
+    public function actionAjaxGetEquipmentSample(string $term, int $brand_id): array
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $data = [];
@@ -182,10 +179,10 @@ class OrderController extends Controller
 
     /**
      * Получить клиентов под jquery autocomplete
-     * @param $term
+     * @param string $term
      * @return array[]|\string[][]
      */
-    public function actionAjaxGetClients($term): array
+    public function actionAjaxGetClients(string $term): array
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $data = [];
@@ -210,10 +207,10 @@ class OrderController extends Controller
     }
 
     /**
-     * @param $term
+     * @param string $term
      * @return array
      */
-    public function actionAjaxGetServices($term): array
+    public function actionAjaxGetServices(string $term): array
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $data = [];
@@ -238,11 +235,9 @@ class OrderController extends Controller
     }
 
     /**
-     * Updates an existing Order model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @param int $id
+     * @return string|Response
+     * @throws NotFoundHttpException
      */
     public function actionUpdate(int $id)
     {
@@ -261,13 +256,13 @@ class OrderController extends Controller
     }
 
     /**
-     * Deletes an existing Order model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @param int $id
+     * @return Response
+     * @throws NotFoundHttpException
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
-    public function actionDelete($id)
+    public function actionDelete(int $id): Response
     {
         $this->findModel($id)->delete();
 
@@ -281,7 +276,7 @@ class OrderController extends Controller
      * @return Order the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    protected function findModel(int $id): Order
     {
         if (($model = Order::findOne($id)) !== null) {
             return $model;

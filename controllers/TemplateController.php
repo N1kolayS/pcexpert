@@ -5,6 +5,7 @@ namespace app\controllers;
 
 
 use app\models\Template;
+use app\models\User;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
@@ -16,21 +17,21 @@ class TemplateController extends Controller
     /**
      * {@inheritdoc}
      */
-    public function behaviors()
+    public function behaviors(): array
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                 'rules' => [
                     [
                         'actions' => ['order', 'close'],
                         'allow' => true,
-                        'roles' => ['admin'],
+                        'roles' => [User::ROLE_ADMIN],
                     ],
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['POST'],
 
