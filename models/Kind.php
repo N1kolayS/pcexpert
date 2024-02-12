@@ -16,7 +16,7 @@ class Kind extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return '{{%kind}}';
     }
@@ -24,7 +24,7 @@ class Kind extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['name'], 'required'],
@@ -35,7 +35,7 @@ class Kind extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'id' => 'ID',
@@ -46,10 +46,10 @@ class Kind extends \yii\db\ActiveRecord
     /**
      * Получить вид техники по имени,
      * в случае отсутствия такого имени, создать вид техники
-     * @param $name
+     * @param string $name
      * @return Kind|null
      */
-    public static function getByName($name)
+    public static function getByName(string $name): ?Kind
     {
         $model = self::findOne(['name' => $name]);
         if (!$model)

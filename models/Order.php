@@ -29,14 +29,14 @@ use yii\helpers\Json;
  * @property string|null $recommendation
  * @property string|null $services -- json данные, услуги
  *
- * @property Client $client
- * @property Equipment $equipment
- * @property User $manager
+ * @property-read  Client $client
+ * @property-read  Equipment $equipment
+ * @property-read  User $manager
  *
- * @property string $statusLabel
- * @property string $statusColor
+ * @property-read  string $statusLabel
+ * @property-read  string $statusColor
  *
- * @property array $service
+ * @property-read  array $service
  *
  */
 class Order extends \yii\db\ActiveRecord
@@ -53,12 +53,12 @@ class Order extends \yii\db\ActiveRecord
     const STATUS_CLOSE_PASSED = 10;
     const STATUS_CLOSE_BOUGHT = 11;
 
-    private $_service_set = false;
+    private bool $_service_set = false;
 
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return '{{%order}}';
     }
@@ -88,11 +88,11 @@ class Order extends \yii\db\ActiveRecord
     /**
      * @return array
      */
-    public function behaviors()
+    public function behaviors(): array
     {
         return [
             [
-                'class' => TimestampBehavior::className(),
+                'class' => TimestampBehavior::class,
                 'createdAtAttribute' => 'created_at',
                 'updatedAtAttribute' => null,
                 'value' => date('Y-m-d H:i:s'),
@@ -113,16 +113,16 @@ class Order extends \yii\db\ActiveRecord
             [['problems', 'comment'], 'string'],
             [['prepayment', 'cost'], 'number'],
             [['kit', 'conclusion', 'recommendation'], 'string', 'max' => 255],
-            [['client_id'], 'exist', 'skipOnError' => true, 'targetClass' => Client::className(), 'targetAttribute' => ['client_id' => 'id']],
-            [['equipment_id'], 'exist', 'skipOnError' => true, 'targetClass' => Equipment::className(), 'targetAttribute' => ['equipment_id' => 'id']],
-            [['manager_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['manager_id' => 'id']],
+            [['client_id'], 'exist', 'skipOnError' => true, 'targetClass' => Client::class, 'targetAttribute' => ['client_id' => 'id']],
+            [['equipment_id'], 'exist', 'skipOnError' => true, 'targetClass' => Equipment::class, 'targetAttribute' => ['equipment_id' => 'id']],
+            [['manager_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['manager_id' => 'id']],
         ];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'id' => 'ID',
@@ -156,7 +156,7 @@ class Order extends \yii\db\ActiveRecord
     /**
      * @return string[]
      */
-    public static function listStatus()
+    public static function listStatus(): array
     {
         return [
             self::STATUS_START        => 'Принят в сервис',
@@ -172,7 +172,7 @@ class Order extends \yii\db\ActiveRecord
     /**
      * @return string[]
      */
-    public static function listColorStatus()
+    public static function listColorStatus(): array
     {
         return [
             self::STATUS_START        => 'danger',
@@ -216,9 +216,9 @@ class Order extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getClient()
+    public function getClient(): \yii\db\ActiveQuery
     {
-        return $this->hasOne(Client::className(), ['id' => 'client_id']);
+        return $this->hasOne(Client::class, ['id' => 'client_id']);
     }
 
     /**
@@ -226,9 +226,9 @@ class Order extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getEquipment()
+    public function getEquipment(): \yii\db\ActiveQuery
     {
-        return $this->hasOne(Equipment::className(), ['id' => 'equipment_id']);
+        return $this->hasOne(Equipment::class, ['id' => 'equipment_id']);
     }
 
     /**
@@ -236,15 +236,15 @@ class Order extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getManager()
+    public function getManager(): \yii\db\ActiveQuery
     {
-        return $this->hasOne(User::className(), ['id' => 'manager_id']);
+        return $this->hasOne(User::class, ['id' => 'manager_id']);
     }
 
     /**
      * @return string[]
      */
-    public static function listPlacement()
+    public static function listPlacement(): array
     {
         return [
             self::PLACEMENT_OFFICE => 'В офисе',

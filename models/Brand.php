@@ -17,7 +17,7 @@ class Brand extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return '{{%brand}}';
     }
@@ -25,7 +25,7 @@ class Brand extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['name'], 'string', 'max' => 255],
@@ -48,18 +48,18 @@ class Brand extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getSamples()
+    public function getSamples(): \yii\db\ActiveQuery
     {
-        return $this->hasMany(Sample::className(), ['brand_id' => 'id']);
+        return $this->hasMany(Sample::class, ['brand_id' => 'id']);
     }
 
     /**
      * Получить производителя по имени,
      * в случае отсутствия такого имени, создать производителя
-     * @param $name
+     * @param string $name
      * @return Brand|null
      */
-    public static function getByName($name)
+    public static function getByName(string $name): ?Brand
     {
         $model = self::findOne(['name' => $name]);
         if (!$model)
@@ -74,7 +74,7 @@ class Brand extends \yii\db\ActiveRecord
     /**
      * @return Brand[]|\yii\db\ActiveRecord[]
      */
-    public static function listAll()
+    public static function listAll(): array
     {
         return self::find()->all();
     }

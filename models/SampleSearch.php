@@ -14,7 +14,7 @@ class SampleSearch extends Sample
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['id', 'brand_id'], 'integer'],
@@ -25,7 +25,7 @@ class SampleSearch extends Sample
     /**
      * {@inheritdoc}
      */
-    public function scenarios()
+    public function scenarios(): array
     {
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
@@ -38,7 +38,7 @@ class SampleSearch extends Sample
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search(array $params): ActiveDataProvider
     {
         $query = Sample::find();
 

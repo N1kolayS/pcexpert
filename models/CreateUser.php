@@ -9,16 +9,16 @@ use app\models\User;
 
 class CreateUser extends Model
 {
-    public $username;
-    public $email;
-    public $password;
-    public $role;
+    public ?string $username = null;
+    public ?string $email = null;
+    public ?string $password = null;
+    public ?string $role = null;
 
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             ['username', 'trim'],
@@ -44,7 +44,7 @@ class CreateUser extends Model
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'username' => 'Имя пользователя',
@@ -59,7 +59,7 @@ class CreateUser extends Model
      *
      * @return User|null the saved model or null if saving fails
      */
-    public function signup()
+    public function signup(): ?\app\models\User
     {
         if (!$this->validate()) {
             return null;

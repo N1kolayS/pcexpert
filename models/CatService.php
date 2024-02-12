@@ -11,14 +11,14 @@ use Yii;
  * @property string|null $name
  * @property int|null $sort
  *
- * @property Service[] $services
+ * @property-read  Service[] $services
  */
 class CatService extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return '{{%cat_service}}';
     }
@@ -26,7 +26,7 @@ class CatService extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['sort'], 'integer'],
@@ -38,7 +38,7 @@ class CatService extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'id' => 'ID',
@@ -52,15 +52,15 @@ class CatService extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getServices()
+    public function getServices(): \yii\db\ActiveQuery
     {
-        return $this->hasMany(Service::className(), ['category_id' => 'id']);
+        return $this->hasMany(Service::class, ['category_id' => 'id']);
     }
 
     /**
      * @return array|\yii\db\ActiveRecord[]
      */
-    public static function listItems()
+    public static function listItems(): array
     {
         return self::find()->orderBy(['sort' => SORT_ASC])->all();
     }
@@ -69,7 +69,7 @@ class CatService extends \yii\db\ActiveRecord
      * @param bool $insert
      * @return bool
      */
-    public function beforeSave($insert)
+    public function beforeSave($insert): bool
     {
         if ($this->isNewRecord)
         {

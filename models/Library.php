@@ -19,7 +19,7 @@ class Library extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return '{{%library}}';
     }
@@ -30,7 +30,7 @@ class Library extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['type', 'name'], 'required'],
@@ -42,7 +42,7 @@ class Library extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'id' => 'ID',
@@ -54,7 +54,7 @@ class Library extends \yii\db\ActiveRecord
     /**
      * @return string[]
      */
-    public static function listTypes()
+    public static function listTypes(): array
     {
         return [
             self::TYPE_KIT => 'Комплектация',
@@ -63,10 +63,10 @@ class Library extends \yii\db\ActiveRecord
     }
 
     /**
-     * Список несиправностей
+     * Список неисправностей
      * @return Library[]|\yii\db\ActiveRecord[]
      */
-    public static function listProblems()
+    public static function listProblems(): array
     {
         return self::find()->where(['type' => self::TYPE_PROBLEM])->all();
     }
@@ -75,16 +75,16 @@ class Library extends \yii\db\ActiveRecord
      * Список комплектов
      * @return Library[]|\yii\db\ActiveRecord[]
      */
-    public static function listKits()
+    public static function listKits(): array
     {
         return self::find()->where(['type' => self::TYPE_KIT])->all();
     }
 
     /**
-     * @return mixed|null
+     * @return string|null
      * @throws \Exception
      */
-    public function getTypeLabel()
+    public function getTypeLabel(): ?string
     {
         return ArrayHelper::getValue(self::listTypes(), $this->type);
     }

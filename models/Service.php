@@ -14,14 +14,14 @@ use Yii;
  * @property float|null $price
  * @property string|null $guarantee
  *
- * @property CatService $category
+ * @property-read  CatService $category
  */
 class Service extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return '{{%service}}';
     }
@@ -29,7 +29,7 @@ class Service extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['category_id', 'name', 'price'], 'required'],
@@ -43,7 +43,7 @@ class Service extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'id' => 'ID',
@@ -60,15 +60,15 @@ class Service extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getCategory()
+    public function getCategory(): \yii\db\ActiveQuery
     {
-        return $this->hasOne(CatService::className(), ['id' => 'category_id']);
+        return $this->hasOne(CatService::class, ['id' => 'category_id']);
     }
 
     /**
      * @return Service[]|\yii\db\ActiveRecord[]
      */
-    public static function listItems()
+    public static function listItems(): array
     {
         return self::find()->all();
     }

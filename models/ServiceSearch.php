@@ -14,7 +14,7 @@ class ServiceSearch extends Service
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['id', 'category_id'], 'integer'],
@@ -26,7 +26,7 @@ class ServiceSearch extends Service
     /**
      * {@inheritdoc}
      */
-    public function scenarios()
+    public function scenarios(): array
     {
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
@@ -39,7 +39,7 @@ class ServiceSearch extends Service
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search(array $params): ActiveDataProvider
     {
         $query = Service::find();
 

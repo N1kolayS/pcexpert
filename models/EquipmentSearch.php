@@ -4,7 +4,6 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Equipment;
 
 /**
  * EquipmentSearch represents the model behind the search form of `app\models\Equipment`.
@@ -14,7 +13,7 @@ class EquipmentSearch extends Equipment
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['id', 'client_id'], 'integer'],
@@ -25,7 +24,7 @@ class EquipmentSearch extends Equipment
     /**
      * {@inheritdoc}
      */
-    public function scenarios()
+    public function scenarios(): array
     {
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
@@ -38,7 +37,7 @@ class EquipmentSearch extends Equipment
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search(array $params): ActiveDataProvider
     {
         $query = Equipment::find();
 

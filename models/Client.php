@@ -18,15 +18,15 @@ use yii\behaviors\TimestampBehavior;
  * @property string|null $comment
  * @property int|null $legal
  *
- * @property User $creator
- * @property string $phoneFormat - отформатированный номер телефон 8 (123) 456-7890
+ * @property-read  User $creator
+ * @property-read  string $phoneFormat - отформатированный номер телефон 8 (123) 456-7890
  */
 class Client extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return '{{%client}}';
     }
@@ -34,11 +34,11 @@ class Client extends \yii\db\ActiveRecord
     /**
      * @return array
      */
-    public function behaviors()
+    public function behaviors(): array
     {
         return [
             [
-                'class' => TimestampBehavior::className(),
+                'class' => TimestampBehavior::class,
                 'createdAtAttribute' => 'created_at',
                 'updatedAtAttribute' => null,
                 'value' => date('Y-m-d H:i:s'),
@@ -49,7 +49,7 @@ class Client extends \yii\db\ActiveRecord
     /**
      * @return string
      */
-    public function getPhoneFormat()
+    public function getPhoneFormat(): string
     {
         $area =   substr($this->phone,0,3);
         $prefix = substr($this->phone,3,3);
@@ -60,7 +60,8 @@ class Client extends \yii\db\ActiveRecord
     /**
      * @return bool
      */
-    public function beforeValidate() {
+    public function beforeValidate(): bool
+    {
         $this->phone = str_replace('-', null, $this->phone);
         return parent::beforeValidate();
     }
@@ -68,7 +69,7 @@ class Client extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['created_at'], 'safe'],
@@ -83,7 +84,7 @@ class Client extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'id' => 'ID',
@@ -103,16 +104,16 @@ class Client extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getCreator()
+    public function getCreator(): \yii\db\ActiveQuery
     {
-        return $this->hasOne(User::className(), ['id' => 'creator_id']);
+        return $this->hasOne(User::class, ['id' => 'creator_id']);
     }
 
     /**
      * @param bool $insert
      * @return bool
      */
-    public function beforeSave($insert)
+    public function beforeSave($insert): bool
     {
         if ($this->isNewRecord) {
             $this->creator_id = Yii::$app->user->id;

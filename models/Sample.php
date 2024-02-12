@@ -15,13 +15,10 @@ use Yii;
  */
 class Sample extends \yii\db\ActiveRecord
 {
-
-
-
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return '{{%sample}}';
     }
@@ -29,20 +26,20 @@ class Sample extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['brand_id', 'name'], 'required'],
             [['brand_id'], 'integer'],
             [['name'], 'string', 'max' => 255],
-            [['brand_id'], 'exist', 'skipOnError' => true, 'targetClass' => Brand::className(), 'targetAttribute' => ['brand_id' => 'id']],
+            [['brand_id'], 'exist', 'skipOnError' => true, 'targetClass' => Brand::class, 'targetAttribute' => ['brand_id' => 'id']],
         ];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'id' => 'ID',
@@ -56,17 +53,17 @@ class Sample extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getBrand()
+    public function getBrand(): \yii\db\ActiveQuery
     {
         return $this->hasOne(Brand::className(), ['id' => 'brand_id']);
     }
 
     /**
-     * @param $name
+     * @param string $name
      * @param Brand $brand
-     * @return Sample|Sample
+     * @return Sample
      */
-    public static function getByName($name, Brand $brand)
+    public static function getByName(string $name, Brand $brand): Sample
     {
         $model = self::findOne(['name' => $name]);
         if (!$model)

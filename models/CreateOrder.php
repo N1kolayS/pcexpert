@@ -13,28 +13,28 @@ use yii\base\Model;
  */
 class CreateOrder extends Model
 {
-    public $client_id;
-    public $client_fio;
-    public $client_phone;
-    public $client_comment;
+    public ?string $client_id = null;
+    public ?string $client_fio = null;
+    public ?string $client_phone = null;
+    public ?string $client_comment = null;
 
-    public $equipment_id;
-    public $equipment_kind;
-    public $equipment_brand;
-    public $equipment_sample;
-    public $equipment_serial_number;
+    public ?int $equipment_id = null;
+    public ?string $equipment_kind = null;
+    public ?string $equipment_brand = null;
+    public ?string $equipment_sample = null;
+    public ?string $equipment_serial_number = null;
 
-    public $kit;
-    public $problems;
-    public $placement;
-    public $prepayment;
-    public $comment;
+    public ?array $kit = null;
+    public ?array $problems = null;
+    public ?string $placement = null;
+    public ?string $prepayment = null;
+    public ?string $comment = null;
 
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             ['client_fio', 'string', 'min' => 2, 'max' => 255],
@@ -59,7 +59,8 @@ class CreateOrder extends Model
     /**
      * @return bool
      */
-    public function beforeValidate() {
+    public function beforeValidate(): bool
+    {
         $this->client_phone = str_replace('-', null, $this->client_phone);
         return parent::beforeValidate();
     }
@@ -77,7 +78,7 @@ class CreateOrder extends Model
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'client_fio' => 'ФИО',
@@ -97,17 +98,17 @@ class CreateOrder extends Model
     /**
      * @return Order|null
      */
-    public function add()
+    public function add(): ?Order
     {
 
         if (!$this->validate()) {
             return null;
         }
-        if (($client = $this->addClient()) === false)
+        if (($client = $this->addClient()) === null)
         {
             return null;
         }
-        if (($equipment = $this->addEquipment($client)) === false)
+        if (($equipment = $this->addEquipment($client)) === null)
         {
             return null;
         }
@@ -132,10 +133,10 @@ class CreateOrder extends Model
     }
 
     /**
-     * Создать клиента  и(или) вернуть модель найденного
-     * @return Client|bool
+     * Создать клиента и(или) вернуть модель найденного
+     * @return Client|null
      */
-    private function addClient()
+    private function addClient(): ?Client
     {
         $client = Client::findOne($this->client_id);
         if (!$client) {
@@ -148,7 +149,7 @@ class CreateOrder extends Model
                 return $client;
             }
             else {
-                return false;
+                return null;
             }
         }
         return $client;
@@ -157,9 +158,9 @@ class CreateOrder extends Model
     /**
      * Создать Оборудование и(или) вернуть модель найденного
      * @param Client $client
-     * @return Equipment|bool|null
+     * @return Equipment|null
      */
-    private function addEquipment(Client $client)
+    private function addEquipment(Client $client): ?Equipment
     {
         $equipment = Equipment::findOne($this->equipment_id);
         if ((!$equipment)) {
@@ -174,7 +175,7 @@ class CreateOrder extends Model
                 return $equipment;
             }
             else {
-                return  false;
+                return  null;
             }
         }
         return $equipment;

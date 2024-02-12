@@ -25,7 +25,7 @@ class Equipment extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return '{{%equipment}}';
     }
@@ -33,11 +33,11 @@ class Equipment extends \yii\db\ActiveRecord
     /**
      * @return array
      */
-    public function behaviors()
+    public function behaviors(): array
     {
         return [
             [
-                'class' => TimestampBehavior::className(),
+                'class' => TimestampBehavior::class,
                 'createdAtAttribute' => 'created_at',
                 'updatedAtAttribute' => null,
                 'value' => date('Y-m-d H:i:s'),
@@ -48,7 +48,7 @@ class Equipment extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['created_at'], 'safe'],
@@ -56,14 +56,14 @@ class Equipment extends \yii\db\ActiveRecord
             [['client_id'], 'integer'],
             [['description'], 'string'],
             [['kind', 'brand', 'sample', 'serial_number'], 'string', 'max' => 255],
-            [['client_id'], 'exist', 'skipOnError' => true, 'targetClass' => Client::className(), 'targetAttribute' => ['client_id' => 'id']],
+            [['client_id'], 'exist', 'skipOnError' => true, 'targetClass' => Client::class, 'targetAttribute' => ['client_id' => 'id']],
         ];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'id' => 'ID',
@@ -82,9 +82,9 @@ class Equipment extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getClient()
+    public function getClient(): \yii\db\ActiveQuery
     {
-        return $this->hasOne(Client::className(), ['id' => 'client_id']);
+        return $this->hasOne(Client::class, ['id' => 'client_id']);
     }
 
     /**
@@ -92,16 +92,16 @@ class Equipment extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getOrders()
+    public function getOrders(): \yii\db\ActiveQuery
     {
-        return $this->hasMany(Order::className(), ['equipment_id' => 'id']);
+        return $this->hasMany(Order::class, ['equipment_id' => 'id']);
     }
 
     /**
      * @param bool $insert
      * @return bool
      */
-    public function beforeSave($insert)
+    public function beforeSave($insert): bool
     {
         $kind = Kind::getByName($this->kind);
         $brand = Brand::getByName($this->brand);

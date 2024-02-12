@@ -12,15 +12,15 @@ use app\models\Order;
 class OrderSearch extends Order
 {
 
-    public $date_from;
-    public $date_to;
-    public $date_range;
-    public $client_fio;
-    public $client_phone;
-    public $equipment_kind;
-    public $equipment_brand;
-    public $equipment_sample;
-    public $equipment_serial_number;
+    public ?string $date_from = null;
+    public ?string $date_to = null;
+    public ?string $date_range = null;
+    public ?string $client_fio = null;
+    public ?string $client_phone = null;
+    public ?string $equipment_kind = null;
+    public ?string $equipment_brand = null;
+    public ?string $equipment_sample = null;
+    public ?string $equipment_serial_number = null;
 
     /**
      * {@inheritdoc}
@@ -42,7 +42,7 @@ class OrderSearch extends Order
     /**
      * {@inheritdoc}
      */
-    public function scenarios()
+    public function scenarios(): array
     {
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
