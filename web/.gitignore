@@ -1,2 +1,3 @@
 # Исключить index, чтобы точка входа была с отладкой
 index.php
+index-test.php

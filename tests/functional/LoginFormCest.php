@@ -1,59 +1,67 @@
 <?php
 
+use app\tests\fixtures\UserFixture;
+
 class LoginFormCest
 {
-    public function _before(\FunctionalTester $I)
+
+    /**
+     * Load fixtures before db transaction begin
+     * Called in _before()
+     * @see \Codeception\Module\Yii2::_before()
+     * @see \Codeception\Module\Yii2::loadFixtures()
+     * @return array
+     */
+    public function _fixtures()
+    {
+        return [
+            'user' => [
+                'class' => UserFixture::class,
+                'dataFile' => codecept_data_dir() . 'login_data.php',
+            ],
+        ];
+    }
+
+
+    public function _before(FunctionalTester $I)
     {
         $I->amOnRoute('site/login');
     }
 
-    public function openLoginPage(\FunctionalTester $I)
-    {
-        $I->see('Login', 'h1');
 
+
+
+    protected function formParams($email, $password)
+    {
+        return [
+            'LoginForm[email]' => $email,
+            'LoginForm[password]' => $password,
+        ];
     }
 
-    // demonstrates `amLoggedInAs` method
-    public function internalLoginById(\FunctionalTester $I)
+    public function checkEmpty(FunctionalTester $I)
     {
-        $I->amLoggedInAs(100);
-        $I->amOnPage('/');
-        $I->see('Logout (admin)');
+        $I->submitForm('#login-form', $this->formParams('sfriesen@jenkins.info', ''));
+        $I->see('Необходимо заполнить «Password»');
     }
 
-    // demonstrates `amLoggedInAs` method
-    public function internalLoginByInstance(\FunctionalTester $I)
+    public function checkWrongPassword(FunctionalTester $I)
     {
-        $I->amLoggedInAs(\app\models\User::findByUsername('admin'));
-        $I->amOnPage('/');
-        $I->see('Logout (admin)');
-    }
-
-    public function loginWithEmptyCredentials(\FunctionalTester $I)
-    {
-        $I->submitForm('#login-form', []);
-        $I->expectTo('see validations errors');
-        $I->see('Username cannot be blank.');
-        $I->see('Password cannot be blank.');
-    }
-
-    public function loginWithWrongCredentials(\FunctionalTester $I)
-    {
-        $I->submitForm('#login-form', [
-            'LoginForm[username]' => 'admin',
-            'LoginForm[password]' => 'wrong',
-        ]);
-        $I->expectTo('see validations errors');
+        $I->submitForm('#login-form', $this->formParams('admin', 'wrong'));
         $I->see('Incorrect username or password.');
     }
 
-    public function loginSuccessfully(\FunctionalTester $I)
+    public function checkInactiveAccount(FunctionalTester $I)
     {
-        $I->submitForm('#login-form', [
-            'LoginForm[username]' => 'admin',
-            'LoginForm[password]' => 'admin',
-        ]);
-        $I->see('Logout (admin)');
-        $I->dontSeeElement('form#login-form');              
+        $I->submitForm('#login-form', $this->formParams('test.test', 'Test1234'));
+        $I->see('Incorrect username or password');
+    }
+
+    public function checkValidLogin(FunctionalTester $I)
+    {
+        $I->submitForm('#login-form', $this->formParams('sfriesen@jenkins.info', 'password_0'));
+        $I->see('Logout (erau)', 'form button[type=submit]');
+        $I->dontSeeLink('Login');
+        $I->dontSeeLink('Signup');
     }
 }

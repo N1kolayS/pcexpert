@@ -3,10 +3,30 @@
 namespace tests\unit\models;
 
 use app\models\LoginForm;
+use app\tests\fixtures\UserFixture;
+
 
 class LoginFormTest extends \Codeception\Test\Unit
 {
     private $model;
+
+    /**
+     * Load fixtures before db transaction begin
+     * Called in _before()
+     * @see \Codeception\Module\Yii2::_before()
+     * @see \Codeception\Module\Yii2::loadFixtures()
+     * @return array
+     */
+    public function _fixtures()
+    {
+        return [
+            'user' => [
+                'class' => UserFixture::class,
+                'dataFile' => codecept_data_dir() . 'login_data.php',
+            ],
+        ];
+    }
+
 
     protected function _after()
     {
@@ -16,7 +36,7 @@ class LoginFormTest extends \Codeception\Test\Unit
     public function testLoginNoUser()
     {
         $this->model = new LoginForm([
-            'username' => 'not_existing_username',
+            'email' => 'not_existing_username',
             'password' => 'not_existing_password',
         ]);
 
@@ -27,8 +47,8 @@ class LoginFormTest extends \Codeception\Test\Unit
     public function testLoginWrongPassword()
     {
         $this->model = new LoginForm([
-            'username' => 'demo',
-            'password' => 'wrong_password',
+            'email' => 'sfriesen@jenkins.info',
+            'password' => 'wrong_pass',
         ]);
 
         expect_not($this->model->login());
@@ -39,8 +59,8 @@ class LoginFormTest extends \Codeception\Test\Unit
     public function testLoginCorrect()
     {
         $this->model = new LoginForm([
-            'username' => 'demo',
-            'password' => 'demo',
+            'email' => 'sfriesen@jenkins.info',
+            'password' => 'password_0',
         ]);
 
         expect_that($this->model->login());

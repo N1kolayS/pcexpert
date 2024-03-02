@@ -99,6 +99,14 @@ class SiteController extends Controller
         return $this->goHome();
     }
 
+    public function actionAbout(): string
+    {
+        $this->layout = 'public';
+        Yii::$app->user->logout();
+
+        return $this->render('about');
+    }
+
     /**
      * Установить куку для состояния левого меню, сложенное или развернутое
      * @param $status
