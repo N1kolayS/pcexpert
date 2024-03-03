@@ -2,9 +2,11 @@ class_name: AcceptanceTester
 modules:
     enabled:
         - WebDriver:
-            url: http://127.0.0.1:8009/
+            url: http://php/
+            host: selenium
+            port: 4444
             browser: firefox
         - Yii2:
-            part: orm
+            part: [orm, fixtures] # allow to use AR methods
             entryScript: index-test.php
             cleanup: false

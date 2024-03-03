@@ -41,3 +41,8 @@ services:
       - PMA_HOST=mysql
     depends_on:
       - mysql
+
+  selenium:
+    image: selenium/standalone-firefox:2.53.0
+    ports:
+      - '4444:4444'

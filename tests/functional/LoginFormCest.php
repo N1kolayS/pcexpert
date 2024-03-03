@@ -60,7 +60,7 @@ class LoginFormCest
     public function checkValidLogin(FunctionalTester $I)
     {
         $I->submitForm('#login-form', $this->formParams('sfriesen@jenkins.info', 'password_0'));
-        $I->see('Logout (erau)', 'form button[type=submit]');
+        $I->see('erau', 'span');
         $I->dontSeeLink('Login');
         $I->dontSeeLink('Signup');
     }
