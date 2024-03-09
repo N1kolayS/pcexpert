@@ -137,8 +137,8 @@ class Order extends \yii\db\ActiveRecord
             'placement' => 'Placement',
             'problems' => 'Problems',
             'kit' => 'Комплектация',
-            'prepayment' => 'Prepayment',
-            'cost' => 'Cost',
+            'prepayment' => 'Предоплата',
+            'cost' => 'Стоимость',
             'comment' => 'Примечания',
             'conclusion' => 'Заключение',
             'recommendation' => 'Рекомендация',
@@ -150,6 +150,7 @@ class Order extends \yii\db\ActiveRecord
 
             'client_fio' => 'Клиент',
             'client_phone' => 'Телефон',
+
         ];
     }
 

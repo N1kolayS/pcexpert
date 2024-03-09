@@ -87,7 +87,7 @@ $this->registerJs($js);
         </header>
         <aside class="main-sidebar">
             <section class="sidebar">
-                <?= dmstr\widgets\Menu::widget(
+                <?= \app\widgets\MenuLteWidget::widget(
                     [
                         'options' => ['class' => 'sidebar-menu tree', 'data-widget'=> 'tree'],
                         'items' => [
@@ -102,7 +102,7 @@ $this->registerJs($js);
                                 ['label' => 'Модели', 'icon' => 'file-text-o', 'url' => ['/sample/index']],
                                 ['label' => 'Бибилиотеки', 'icon' => 'file-text-o', 'url' => ['/library/index']],
                             ]],
-                            ['label' => 'Admin', 'header' => true],
+                            ['label' => 'Админ часть', 'header' => true],
                             ['label' => 'Стоимость услуг', 'icon' => 'money', 'url' => '#', 'items' => [
                                 ['label' => 'Категории', 'icon' => 'book', 'url' => ['/cat-service/index']],
                                 ['label' => 'Услуги', 'icon' => 'folder', 'url' => ['/service/index']],
