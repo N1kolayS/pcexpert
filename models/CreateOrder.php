@@ -13,7 +13,7 @@ use yii\base\Model;
  */
 class CreateOrder extends Model
 {
-    public ?string $client_id = null;
+    public ?int $client_id = null;
     public ?string $client_fio = null;
     public ?string $client_phone = null;
     public ?string $client_comment = null;
@@ -24,7 +24,7 @@ class CreateOrder extends Model
     public ?string $equipment_sample = null;
     public ?string $equipment_serial_number = null;
 
-    public ?array $kit = null;
+    public  $kit;
     public ?array $problems = null;
     public ?string $placement = null;
     public ?string $prepayment = null;
@@ -57,6 +57,7 @@ class CreateOrder extends Model
     }
 
     /**
+     * Перед валидацией очищаем телефон он символов дефиса, чтобы остались только цифры
      * @return bool
      */
     public function beforeValidate(): bool
@@ -66,6 +67,7 @@ class CreateOrder extends Model
     }
 
     /**
+     * Кастомный фильтр для проверки номера телефона
      * @param $attribute
      */
     public function is10NumbersOnly($attribute)
@@ -98,7 +100,7 @@ class CreateOrder extends Model
     /**
      * @return Order|null
      */
-    public function add(): ?Order
+    public function create(): ?Order
     {
 
         if (!$this->validate()) {
@@ -163,7 +165,7 @@ class CreateOrder extends Model
     private function addEquipment(Client $client): ?Equipment
     {
         $equipment = Equipment::findOne($this->equipment_id);
-        if ((!$equipment)) {
+        if (!$equipment) {
             $equipment = new Equipment();
             $equipment->kind = $this->equipment_kind;
             $equipment->brand = $this->equipment_brand;

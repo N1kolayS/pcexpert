@@ -98,7 +98,7 @@ class OrderController extends Controller
     {
         $model = new CreateOrder();
 
-        if ($model->load(Yii::$app->request->post()) && (($order = $model->add())!=null)) {
+        if ($model->load(Yii::$app->request->post()) && (($order = $model->create())!=null)) {
             Yii::$app->session->setFlash('print_order_id', $order->id);
             return $this->redirect(['index']);
         }
